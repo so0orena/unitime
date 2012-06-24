@@ -82,7 +82,6 @@ import org.unitime.timetable.model.dao.SessionDAO;
 import org.unitime.timetable.onlinesectioning.CourseInfo;
 import org.unitime.timetable.onlinesectioning.OnlineSectioningServer;
 import org.unitime.timetable.onlinesectioning.OnlineSectioningService;
-import org.unitime.timetable.spring.SimpleUserContext;
 import org.unitime.timetable.util.Constants;
 import org.unitime.timetable.util.DateUtils;
 
@@ -307,17 +306,17 @@ public class CalendarServlet extends HttpServlet {
             	if (hasRoomFilter)
             		r.setRoomFilter(roomFilter);
             	String user = params.getParameter("user");
-            	SimpleUserContext u = null;
+            	User u = null;
             	if (user != null) {
-            		u = new SimpleUserContext();
-            		u.setExternalUsetId(user);
+            		u = new User();
+            		u.setId(user);
             		eventFilter.setOption("user", user);
             		roomFilter.setOption("user", user);
             		String role = params.getParameter("role");
             		if (role != null) {
             			eventFilter.setOption("role", role);
             			roomFilter.setOption("role", role);
-            			u.setCurrentRole(role);
+            			u.setRole(role);
             		}
             	}
             	for (EventInterface e: new EventLookupBackend().findEvents(r, new SimpleEventRights(u, false, sessionId)))

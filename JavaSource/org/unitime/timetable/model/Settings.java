@@ -29,7 +29,6 @@ import org.unitime.commons.User;
 import org.unitime.timetable.model.base.BaseSettings;
 import org.unitime.timetable.model.dao.SettingsDAO;
 import org.unitime.timetable.model.dao._RootDAO;
-import org.unitime.timetable.spring.UserContext;
 
 
 
@@ -63,12 +62,6 @@ public class Settings extends BaseSettings {
 	
     public static Set getSettings(User user) {
         TimetableManager tm = TimetableManager.getManager(user);
-        
-	    return (tm==null?null:tm.getSettings());
-    }
-    
-    public static Set getSettings(UserContext user) {
-        TimetableManager tm = TimetableManager.findByExternalId(user.getExternalUserId());
         
 	    return (tm==null?null:tm.getSettings());
     }
@@ -157,15 +150,6 @@ public class Settings extends BaseSettings {
 	 * @return user setting or default value if none exists
 	 */
 	public static String getSettingValue(User user, String key) {
-		Settings setting = Settings.getSetting(key);
-		if (setting==null) return null;
-		String defaultValue = setting.getDefaultValue();		
-		Set managerSettings = Settings.getSettings(user);
-		String valueArr[] = Settings.getSettingValue(user.getCurrentRole(), managerSettings, setting.getUniqueId(), defaultValue);
-		return valueArr[1];
-	}
-	
-	public static String getSettingValue(UserContext user, String key) {
 		Settings setting = Settings.getSetting(key);
 		if (setting==null) return null;
 		String defaultValue = setting.getDefaultValue();		

@@ -26,11 +26,10 @@ import java.util.Iterator;
 
 import org.apache.commons.fileupload.FileItem;
 import org.hibernate.Transaction;
-import org.springframework.stereotype.Service;
 import org.unitime.localization.impl.Localization;
 import org.unitime.timetable.gwt.command.client.GwtRpcException;
+import org.unitime.timetable.gwt.command.server.GwtRpcHelper;
 import org.unitime.timetable.gwt.resources.GwtMessages;
-import org.unitime.timetable.gwt.server.UploadServlet;
 import org.unitime.timetable.gwt.shared.EventInterface;
 import org.unitime.timetable.gwt.shared.EventInterface.ApproveEventRpcRequest;
 import org.unitime.timetable.gwt.shared.EventInterface.MeetingInterface;
@@ -43,14 +42,12 @@ import org.unitime.timetable.model.Meeting;
 import org.unitime.timetable.model.Session;
 import org.unitime.timetable.model.dao.EventDAO;
 import org.unitime.timetable.model.dao.SessionDAO;
-import org.unitime.timetable.spring.SessionContext;
 
-@Service("org.unitime.timetable.gwt.shared.EventInterface$ApproveEventRpcRequest")
 public class ApproveEventBackend extends EventAction<ApproveEventRpcRequest, SaveOrApproveEventRpcResponse>{
 	protected static GwtMessages MESSAGES = Localization.create(GwtMessages.class);
 	
 	@Override
-	public SaveOrApproveEventRpcResponse execute(ApproveEventRpcRequest request, SessionContext context, EventRights rights) {
+	public SaveOrApproveEventRpcResponse execute(ApproveEventRpcRequest request, GwtRpcHelper helper, EventRights rights) {
 		org.hibernate.Session hibSession = SessionDAO.getInstance().createNewSession();
 		Transaction tx = hibSession.beginTransaction();
 		try {
@@ -65,7 +62,7 @@ public class ApproveEventBackend extends EventAction<ApproveEventRpcRequest, Sav
 				throw new GwtRpcException(MESSAGES.failedApproveEventNoMeetings());
 
 			Date now = new Date();
-	        String uname = EventPropertiesBackend.lookupMainContact(request.getSessionId(), context.getUser()).getShortName();
+	        String uname = EventPropertiesBackend.lookupMainContact(request.getSessionId(), helper.getUser()).getShortName();
 	        
 	        meetings: for (Iterator<Meeting> i = event.getMeetings().iterator(); i.hasNext(); ) {
         		Meeting meeting = i.next();
@@ -98,7 +95,7 @@ public class ApproveEventBackend extends EventAction<ApproveEventRpcRequest, Sav
     			}
 	        }
 	        
-			final FileItem uploaded = (FileItem)context.getAttribute(UploadServlet.SESSION_LAST_FILE);
+			final FileItem uploaded = helper.getLastUploadedFile();
 			
 			EventNote note = new EventNote();
 			note.setEvent(event);
@@ -145,7 +142,7 @@ public class ApproveEventBackend extends EventAction<ApproveEventRpcRequest, Sav
 				response.setEvent(EventDetailBackend.getEventDetail(session, event, rights));
 			}
 			
-			new EventEmail(request, response).send(context);
+			new EventEmail(request, response).send(helper);
 			
 			tx.commit(); tx = null;
 			

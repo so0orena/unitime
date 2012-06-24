@@ -29,7 +29,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.hibernate.HibernateException;
-import org.springframework.stereotype.Service;
 import org.unitime.timetable.form.DistributionTypeListForm;
 import org.unitime.timetable.model.DistributionType;
 
@@ -41,7 +40,6 @@ import org.unitime.timetable.model.DistributionType;
  * XDoclet definition:
  * @struts:action path="/distributionTypeList" name="distributionTypeListForm" input="/admin/distributionTypeList.jsp" scope="request" validate="true"
  */
-@Service("/distributionTypeList")
 public class DistributionTypeListAction extends Action {
 
 	// --------------------------------------------------------- Instance Variables

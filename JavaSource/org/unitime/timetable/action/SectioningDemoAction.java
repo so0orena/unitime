@@ -39,7 +39,6 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
-import org.springframework.stereotype.Service;
 import org.unitime.commons.User;
 import org.unitime.commons.web.Web;
 import org.unitime.timetable.ApplicationProperties;
@@ -52,7 +51,6 @@ import org.unitime.timetable.test.StudentSectioningTest;
 /** 
  * @author Tomas Muller
  */
-@Service("/sectioningDemo")
 public class SectioningDemoAction extends Action {
 
     /** 

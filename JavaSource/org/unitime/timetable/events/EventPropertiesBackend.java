@@ -22,7 +22,8 @@ package org.unitime.timetable.events;
 import java.util.Collections;
 import java.util.List;
 
-import org.springframework.stereotype.Service;
+import org.unitime.commons.User;
+import org.unitime.timetable.gwt.command.server.GwtRpcHelper;
 import org.unitime.timetable.gwt.server.LookupServlet;
 import org.unitime.timetable.gwt.shared.EventInterface.EventType;
 import org.unitime.timetable.gwt.shared.PersonInterface;
@@ -41,14 +42,11 @@ import org.unitime.timetable.model.TimetableManager;
 import org.unitime.timetable.model.dao.EventContactDAO;
 import org.unitime.timetable.model.dao.SessionDAO;
 import org.unitime.timetable.model.dao.StandardEventNoteDAO;
-import org.unitime.timetable.spring.SessionContext;
-import org.unitime.timetable.spring.UserContext;
 
-@Service("org.unitime.timetable.gwt.shared.EventInterface$EventPropertiesRpcRequest")
 public class EventPropertiesBackend extends EventAction<EventPropertiesRpcRequest, EventPropertiesRpcResponse>{
 
 	@Override
-	public EventPropertiesRpcResponse execute(EventPropertiesRpcRequest request, SessionContext context, EventRights rights) {
+	public EventPropertiesRpcResponse execute(EventPropertiesRpcRequest request, GwtRpcHelper helper, EventRights rights) {
 		EventPropertiesRpcResponse response = new EventPropertiesRpcResponse();
 		
 		Session session = SessionDAO.getInstance().get(request.getSessionId());
@@ -63,8 +61,8 @@ public class EventPropertiesBackend extends EventAction<EventPropertiesRpcReques
 		
 		setupSponsoringOrganizations(session,  response);
 		
-		if (context.getUser() != null)
-			response.setMainContact(lookupMainContact(request.getSessionId(), context.getUser()));
+		if (helper.getUser() != null)
+			response.setMainContact(lookupMainContact(request.getSessionId(), helper.getUser()));
 		
 		setupStandardNotes(session, response);
 		
@@ -81,11 +79,11 @@ public class EventPropertiesBackend extends EventAction<EventPropertiesRpcReques
 		}
 	}
 	
-	public static ContactInterface lookupMainContact(Long sessionId, UserContext user) {
+	public static ContactInterface lookupMainContact(Long sessionId, User user) {
 		org.hibernate.Session hibSession = EventContactDAO.getInstance().getSession();
 		EventContact contact = (EventContact)hibSession.createQuery(
 				"from EventContact where externalUniqueId = :userId"
-				).setString("userId", user.getExternalUserId()).setMaxResults(1).uniqueResult();
+				).setString("userId", user.getId()).setMaxResults(1).uniqueResult();
 		if (contact != null) {
 			ContactInterface c = new ContactInterface();
 			c.setFirstName(contact.getFirstName());
@@ -98,7 +96,7 @@ public class EventPropertiesBackend extends EventAction<EventPropertiesRpcReques
 		}
 		TimetableManager manager = (TimetableManager)hibSession.createQuery(
 				"from TimetableManager where externalUniqueId = :userId"
-				).setString("userId", user.getExternalUserId()).setMaxResults(1).uniqueResult();
+				).setString("userId", user.getId()).setMaxResults(1).uniqueResult();
 		if (manager != null) {
 			ContactInterface c = new ContactInterface();
 			c.setExternalId(manager.getExternalUniqueId());
@@ -110,7 +108,7 @@ public class EventPropertiesBackend extends EventAction<EventPropertiesRpcReques
 		}
 		DepartmentalInstructor instructor = (DepartmentalInstructor)hibSession.createQuery(
 				"from DepartmentalInstructor where department.session.uniqueId = :sessionId and externalUniqueId = :userId"
-				).setLong("sessionId", sessionId).setString("userId", user.getExternalUserId()).setMaxResults(1).uniqueResult();
+				).setLong("sessionId", sessionId).setString("userId", user.getId()).setMaxResults(1).uniqueResult();
 		if (instructor != null) {
 			ContactInterface c = new ContactInterface();
 			c.setExternalId(instructor.getExternalUniqueId());
@@ -122,7 +120,7 @@ public class EventPropertiesBackend extends EventAction<EventPropertiesRpcReques
 		}
 		Staff staff = (Staff)hibSession.createQuery(
 				"from Staff where externalUniqueId = :userId"
-				).setString("userId", user.getExternalUserId()).setMaxResults(1).uniqueResult();
+				).setString("userId", user.getId()).setMaxResults(1).uniqueResult();
 		if (staff != null) {
 			ContactInterface c = new ContactInterface();
 			c.setExternalId(staff.getExternalUniqueId());
@@ -134,7 +132,7 @@ public class EventPropertiesBackend extends EventAction<EventPropertiesRpcReques
 		}
 		Student student = (Student)hibSession.createQuery(
 				"from Student where session.uniqueId = :sessionId and externalUniqueId = :userId"
-				).setLong("sessionId", sessionId).setString("userId", user.getExternalUserId()).setMaxResults(1).uniqueResult();
+				).setLong("sessionId", sessionId).setString("userId", user.getId()).setMaxResults(1).uniqueResult();
 		if (student != null) {
 			ContactInterface c = new ContactInterface();
 			c.setExternalId(student.getExternalUniqueId());
@@ -147,7 +145,7 @@ public class EventPropertiesBackend extends EventAction<EventPropertiesRpcReques
 		List<PersonInterface> people = new LookupServlet().lookupPeople(user.getName(), "mustHaveExternalId,session=" + sessionId);
 		if (people != null) {
 			for (PersonInterface person: people) {
-				if (user.getExternalUserId().equals(person.getId())) {
+				if (user.getId().equals(person.getId())) {
 					ContactInterface c = new ContactInterface();
 					c.setFirstName(person.getFirstName());
 					c.setMiddleName(person.getMiddleName());
@@ -175,7 +173,7 @@ public class EventPropertiesBackend extends EventAction<EventPropertiesRpcReques
 			c.setFirstName(mName);
 			c.setLastName(name[name.length - 1]);
 		}
-		c.setExternalId(user.getExternalUserId());
+		c.setExternalId(user.getId());
 		return c;
 	}
 	

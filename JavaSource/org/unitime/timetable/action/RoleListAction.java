@@ -32,7 +32,6 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.springframework.stereotype.Service;
 import org.unitime.commons.Debug;
 import org.unitime.commons.MultiComparable;
 import org.unitime.commons.User;
@@ -60,7 +59,6 @@ import org.unitime.timetable.util.Constants;
  * @struts:action-forward name="success" path="/main.jsp" contextRelative="true"
  * @struts:action-forward name="fail" path="/selectPrimaryRole.jsp" contextRelative="true"
  */
-@Service("/selectPrimaryRole")
 public class RoleListAction extends Action {
 
     /**

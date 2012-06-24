@@ -29,7 +29,6 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessages;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.springframework.stereotype.Service;
 import org.unitime.timetable.form.SponsoringOrgEditForm;
 import org.unitime.timetable.model.SponsoringOrganization;
 import org.unitime.timetable.model.dao._RootDAO;
@@ -37,7 +36,6 @@ import org.unitime.timetable.model.dao._RootDAO;
 /**
  * @author Zuzana Mullerova
  */
-@Service("/sponsoringOrgEdit")
 public class SponsoringOrgEditAction extends Action {
 
 	public ActionForward execute(

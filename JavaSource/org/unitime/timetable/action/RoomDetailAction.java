@@ -39,7 +39,6 @@ import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.MessageResources;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.stereotype.Service;
 import org.unitime.commons.User;
 import org.unitime.commons.web.Web;
 import org.unitime.timetable.form.RoomDetailForm;
@@ -81,7 +80,6 @@ import org.unitime.timetable.webutil.RequiredTimeTable;
  * @struts.action-forward name="showEditRoomPref" path="/editRoomPref.do"
  * @struts.action-forward name="showEditRoomDept" path="/editRoomDept.do"
  */
-@Service("/roomDetail")
 public class RoomDetailAction extends Action {
 
 	// --------------------------------------------------------- Instance Variables

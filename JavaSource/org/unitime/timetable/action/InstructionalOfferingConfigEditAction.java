@@ -41,7 +41,6 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.MessageResources;
 import org.hibernate.Transaction;
-import org.springframework.stereotype.Service;
 import org.unitime.commons.Debug;
 import org.unitime.commons.User;
 import org.unitime.commons.web.Web;
@@ -93,7 +92,6 @@ import org.unitime.timetable.webutil.SchedulingSubpartTableBuilder;
  * XDoclet definition:
  * @struts:action path="/instructionalOfferingConfigEdit" name="InstructionalOfferingConfigEditForm" input="/instructionalOfferingConfigEdit.jsp" scope="request"
  */
-@Service("/instructionalOfferingConfigEdit")
 public class InstructionalOfferingConfigEditAction extends Action {
 	
 	protected final static CourseMessages MSG = Localization.create(CourseMessages.class);

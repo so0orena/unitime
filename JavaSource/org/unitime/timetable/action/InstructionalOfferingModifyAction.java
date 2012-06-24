@@ -38,7 +38,6 @@ import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.MessageResources;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.springframework.stereotype.Service;
 import org.unitime.commons.Debug;
 import org.unitime.commons.User;
 import org.unitime.commons.web.Web;
@@ -78,7 +77,7 @@ import org.unitime.timetable.solver.WebSolver;
 import org.unitime.timetable.util.Constants;
 import org.unitime.timetable.util.LookupTables;
 
-@Service("/instructionalOfferingModify")
+
 public class InstructionalOfferingModifyAction extends Action {
 
 	protected final static CourseMessages MSG = Localization.create(CourseMessages.class);

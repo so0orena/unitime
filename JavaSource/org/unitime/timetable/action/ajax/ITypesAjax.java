@@ -30,7 +30,6 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.springframework.stereotype.Service;
 import org.unitime.commons.Debug;
 import org.unitime.timetable.model.ItypeDesc;
 
@@ -39,7 +38,6 @@ import org.unitime.timetable.model.ItypeDesc;
  * @author Tomas Muller
  *
  */
-@Service("/itypesAjax")
 public class ITypesAjax extends Action {
 
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {

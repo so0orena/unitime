@@ -42,7 +42,6 @@ import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.MessageResources;
 import org.hibernate.Query;
 import org.hibernate.Transaction;
-import org.springframework.stereotype.Service;
 import org.unitime.commons.Debug;
 import org.unitime.commons.User;
 import org.unitime.commons.web.Web;
@@ -85,7 +84,6 @@ import org.unitime.timetable.webutil.DistributionPrefsTableBuilder;
  * XDoclet definition:
  * @struts:action path="/distributionPrefs" name="distributionPrefsForm" input="/user/distributionPrefs.jsp" scope="request"
  */
-@Service("/distributionPrefs")
 public class DistributionPrefsAction extends Action {
 	protected final static CourseMessages MSG = Localization.create(CourseMessages.class);
 

@@ -33,14 +33,16 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.servlet.ServletException;
+
 import net.sf.cpsolver.coursett.model.Placement;
 import net.sf.cpsolver.coursett.model.RoomLocation;
 import net.sf.cpsolver.ifs.util.ToolBox;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.unitime.commons.User;
+import org.unitime.commons.web.Web;
 import org.unitime.timetable.ApplicationProperties;
 import org.unitime.timetable.gwt.services.CurriculaService;
 import org.unitime.timetable.gwt.shared.ClassAssignmentInterface;
@@ -89,21 +91,21 @@ import org.unitime.timetable.model.dao.InstructionalOfferingDAO;
 import org.unitime.timetable.model.dao.PosMajorDAO;
 import org.unitime.timetable.onlinesectioning.AcademicSessionInfo;
 import org.unitime.timetable.onlinesectioning.custom.CourseDetailsProvider;
-import org.unitime.timetable.spring.SessionContext;
-import org.unitime.timetable.spring.UserContext;
 import org.unitime.timetable.test.MakeCurriculaFromLastlikeDemands;
 import org.unitime.timetable.util.Constants;
+
+import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
  * @author Tomas Muller
  */
-@Service("curricula.gwt")
-public class CurriculaServlet implements CurriculaService {
+public class CurriculaServlet extends RemoteServiceServlet implements CurriculaService {
+	private static final long serialVersionUID = 4873723219428043859L;
 	private static Logger sLog = Logger.getLogger(CurriculaServlet.class);
 	private static DecimalFormat sDF = new DecimalFormat("0.0");
 	private CourseDetailsProvider iCourseDetailsProvider;
 	
-	public CurriculaServlet() {
+	public void init() throws ServletException {
 		try {
 			String providerClass = ApplicationProperties.getProperty("unitime.custom.CourseDetailsProvider");
 			if (providerClass != null)
@@ -113,18 +115,15 @@ public class CurriculaServlet implements CurriculaService {
 		}
 	}
 	
-	private @Autowired SessionContext sessionContext;
-	private SessionContext getSessionContext() { return sessionContext; }
-	
 	public TreeSet<CurriculumInterface> findCurricula(String filter) throws CurriculaException, PageAccessException {
 		try {
 			sLog.debug("findCurricula(filter='" + filter+"')");
 			Long s0 = System.currentTimeMillis();
 			TreeSet<CurriculumInterface> results = new TreeSet<CurriculumInterface>();
 			Query q = new Query(filter);
-			getSessionContext().setAttribute("Curricula.LastFilter", filter);
+			getThreadLocalRequest().getSession().setAttribute("Curricula.LastFilter", filter);
 			org.hibernate.Session hibSession = CurriculumDAO.getInstance().getSession();
-			UserContext user = getSessionContext().getUser();
+			User user = Web.getUser(getThreadLocalRequest().getSession());
 			try {
 				List<Curriculum> curricula = findAllCurricula(hibSession);
 				for (Curriculum c: curricula) {
@@ -274,7 +273,7 @@ public class CurriculaServlet implements CurriculaService {
 				classifications.put(clasf.getId(), idx++);
 			}
 			
-			UserContext user = getSessionContext().getUser();
+			User user = Web.getUser(getThreadLocalRequest().getSession());
 
 			org.hibernate.Session hibSession = CurriculumDAO.getInstance().getSession();
 			try {
@@ -441,7 +440,7 @@ public class CurriculaServlet implements CurriculaService {
 			Long s0 = System.currentTimeMillis();
 			org.hibernate.Session hibSession = CurriculumDAO.getInstance().getSession();
 			Transaction tx = null;
-			UserContext user = getSessionContext().getUser();
+			User user = Web.getUser(getThreadLocalRequest().getSession());
 			try {
 				tx = hibSession.beginTransaction();
 				
@@ -643,7 +642,7 @@ public class CurriculaServlet implements CurriculaService {
 				}
 				
 				ChangeLog.addChange(hibSession,
-						getSessionContext(),
+						getThreadLocalRequest(),
 						c,
 						c.getAbbv(),
 						Source.CURRICULUM_EDIT, 
@@ -680,7 +679,7 @@ public class CurriculaServlet implements CurriculaService {
 			Long s0 = System.currentTimeMillis();
 			org.hibernate.Session hibSession = CurriculumDAO.getInstance().getSession();
 			Transaction tx = null;
-			UserContext user = getSessionContext().getUser();
+			User user = Web.getUser(getThreadLocalRequest().getSession());
 			try {
 				tx = hibSession.beginTransaction();
 				
@@ -721,7 +720,7 @@ public class CurriculaServlet implements CurriculaService {
 					}
 					
 					ChangeLog.addChange(hibSession,
-							getSessionContext(),
+							getThreadLocalRequest(),
 							c,
 							c.getAbbv(),
 							Source.CUR_CLASF_EDIT, 
@@ -758,7 +757,7 @@ public class CurriculaServlet implements CurriculaService {
 			sLog.debug("deleteCurriculum(curriculumId=" + curriculumId + ")");
 			Long s0 = System.currentTimeMillis();
 			org.hibernate.Session hibSession = CurriculumDAO.getInstance().getSession();
-			UserContext user = getSessionContext().getUser();
+			User user = Web.getUser(getThreadLocalRequest().getSession());
 			Transaction tx = null;
 			try {
 				tx = hibSession.beginTransaction();
@@ -772,7 +771,7 @@ public class CurriculaServlet implements CurriculaService {
 				if (!c.canUserEdit(user)) throw new CurriculaException("You are not authorized to delete this curriculum.");
 				
 				ChangeLog.addChange(hibSession,
-						getSessionContext(),
+						getThreadLocalRequest(),
 						c,
 						c.getAbbv(),
 						Source.CURRICULUM_EDIT, 
@@ -809,7 +808,7 @@ public class CurriculaServlet implements CurriculaService {
 			sLog.debug("deleteCurricula(curriculumIds=" + curriculumIds + ")");
 			Long s0 = System.currentTimeMillis();
 			org.hibernate.Session hibSession = CurriculumDAO.getInstance().getSession();
-			UserContext user = getSessionContext().getUser();
+			User user = Web.getUser(getThreadLocalRequest().getSession());
 			Transaction tx = null;
 			try {
 				tx = hibSession.beginTransaction();
@@ -824,7 +823,7 @@ public class CurriculaServlet implements CurriculaService {
 					if (!c.canUserEdit(user)) throw new CurriculaException("You are not authorized to delete curriculum " + c.getAbbv() + ".");
 					
 					ChangeLog.addChange(hibSession,
-							getSessionContext(),
+							getThreadLocalRequest(),
 							c,
 							c.getAbbv(),
 							Source.CURRICULUM_EDIT, 
@@ -863,7 +862,7 @@ public class CurriculaServlet implements CurriculaService {
 			sLog.debug("mergeCurricula(curriculumIds=" + curriculumIds + ")");
 			Long s0 = System.currentTimeMillis();
 			org.hibernate.Session hibSession = CurriculumDAO.getInstance().getSession();
-			UserContext user = getSessionContext().getUser();
+			User user = Web.getUser(getThreadLocalRequest().getSession());
 			Transaction tx = null;
 			try {
 				tx = hibSession.beginTransaction();
@@ -1020,7 +1019,7 @@ public class CurriculaServlet implements CurriculaService {
 				
 				for (Curriculum curriculum: merged) {
 					ChangeLog.addChange(hibSession,
-							getSessionContext(),
+							getThreadLocalRequest(),
 							curriculum,
 							curriculum.getAbbv() + " &rarr; " + mergedCurriculum.getAbbv(),
 							Source.CURRICULA, 
@@ -1648,8 +1647,8 @@ public class CurriculaServlet implements CurriculaService {
 			org.hibernate.Session hibSession = CurriculumDAO.getInstance().getSession();
 			Long sessionId = getAcademicSessionId();
 			try {
-				UserContext user = getSessionContext().getUser();
-				if (Roles.ADMIN_ROLE.equals(user.getCurrentRole())) {
+				User user = Web.getUser(getThreadLocalRequest().getSession());
+				if (Roles.ADMIN_ROLE.equals(user.getRole())) {
 					List<Department> depts = hibSession.createQuery(
 							"select d from Department d where d.session.uniqueId = :sessionId order by d.deptCode")
 							.setLong("sessionId", sessionId).setCacheable(true).list();
@@ -1693,7 +1692,7 @@ public class CurriculaServlet implements CurriculaService {
 	public String lastCurriculaFilter() throws CurriculaException, PageAccessException {
 		sLog.debug("lastCurriculaFilter()");
 		Long s0 = System.currentTimeMillis();
-		String filter = (String)getSessionContext().getAttribute("Curricula.LastFilter");
+		String filter = (String)getThreadLocalRequest().getSession().getAttribute("Curricula.LastFilter");
 		if (filter == null) {
 			filter = "";
 			Long sessionId = getAcademicSessionId();
@@ -1900,13 +1899,13 @@ public class CurriculaServlet implements CurriculaService {
 	
 	public Boolean canAddCurriculum() throws CurriculaException, PageAccessException {
 		try {
-			UserContext user = getSessionContext().getUser();
+			User user = Web.getUser(getThreadLocalRequest().getSession());
 			if (user == null) throw new PageAccessException(
-					getSessionContext().isHttpSessionNew() ? "Your timetabling session has expired. Please log in again." : "Login is required to use this page.");
-			if (user.getCurrentRole() == null) throw new PageAccessException("Insufficient user privileges.");
-			return Roles.CURRICULUM_MGR_ROLE.equals(user.getCurrentRole()) ||
-				Roles.DEPT_SCHED_MGR_ROLE.equals(user.getCurrentRole()) ||
-				Roles.ADMIN_ROLE.equals(user.getCurrentRole());
+					getThreadLocalRequest().getSession().isNew() ? "Your timetabling session has expired. Please log in again." : "Login is required to use this page.");
+			if (user.getRole() == null) throw new PageAccessException("Insufficient user privileges.");
+			return Roles.CURRICULUM_MGR_ROLE.equals(user.getRole()) ||
+				Roles.DEPT_SCHED_MGR_ROLE.equals(user.getRole()) ||
+				Roles.ADMIN_ROLE.equals(user.getRole());
 		} catch (PageAccessException e) {
 			throw e;
 		} catch (CurriculaException e) {
@@ -1919,8 +1918,8 @@ public class CurriculaServlet implements CurriculaService {
 	
 	public Boolean isAdmin() throws CurriculaException, PageAccessException {
 		try {
-			UserContext user = getSessionContext().getUser();
-			return user != null && Roles.ADMIN_ROLE.equals(user.getCurrentRole());
+			User user = Web.getUser(getThreadLocalRequest().getSession());
+			return user != null && Roles.ADMIN_ROLE.equals(user.getRole());
 		} catch (PageAccessException e) {
 			throw e;
 		} catch (CurriculaException e) {
@@ -1935,10 +1934,10 @@ public class CurriculaServlet implements CurriculaService {
 		sLog.debug("loadProjectionRules()");
 		Long s0 = System.currentTimeMillis();
 		try {
-			UserContext user = getSessionContext().getUser();
+			User user = Web.getUser(getThreadLocalRequest().getSession());
 			if (user == null) throw new PageAccessException(
-					getSessionContext().isHttpSessionNew() ? "Your timetabling session has expired. Please log in again." : "Login is required to use this page.");
-			if (!Roles.ADMIN_ROLE.equals(user.getCurrentRole()) && !Roles.CURRICULUM_MGR_ROLE.equals(user.getCurrentRole()) && !Roles.DEPT_SCHED_MGR_ROLE.equals(user.getCurrentRole()))
+					getThreadLocalRequest().getSession().isNew() ? "Your timetabling session has expired. Please log in again." : "Login is required to use this page.");
+			if (!Roles.ADMIN_ROLE.equals(user.getRole()) && !Roles.CURRICULUM_MGR_ROLE.equals(user.getRole()) && !Roles.DEPT_SCHED_MGR_ROLE.equals(user.getRole()))
 				throw new PageAccessException("Insufficient user privileges.");
 
 			HashMap<AcademicAreaInterface, HashMap<MajorInterface, HashMap<AcademicClassificationInterface, Number[]>>> rules = new HashMap<AcademicAreaInterface, HashMap<MajorInterface,HashMap<AcademicClassificationInterface, Number[]>>>();
@@ -2059,7 +2058,7 @@ public class CurriculaServlet implements CurriculaService {
 						.setLong("sessionId", sessionId).setCacheable(true).list()) {
 					
 					ChangeLog.addChange(hibSession,
-							getSessionContext(),
+							getThreadLocalRequest(),
 							rule,
 							rule.getAcademicArea().getAcademicAreaAbbreviation() + (rule.getMajor() == null ? "" : "/" + rule.getMajor().getCode()) + " " + rule.getAcademicClassification().getCode() + ": " + sDF.format(100.0 * rule.getProjection()) + "%",
 							Source.CUR_PROJ_RULES, 
@@ -2091,7 +2090,7 @@ public class CurriculaServlet implements CurriculaService {
 							hibSession.saveOrUpdate(r);	
 							
 							ChangeLog.addChange(hibSession,
-									getSessionContext(),
+									getThreadLocalRequest(),
 									r,
 									area.getAcademicAreaAbbreviation() + (major == null ? "" : "/" + major.getCode()) + " " + clasf.getCode() + ": " +
 									sDF.format(100.0 * r.getProjection()) + "%",
@@ -2126,12 +2125,12 @@ public class CurriculaServlet implements CurriculaService {
 	}
 	
 	public Boolean canEditProjectionRules() throws CurriculaException, PageAccessException {
-		UserContext user = getSessionContext().getUser();
+		User user = Web.getUser(getThreadLocalRequest().getSession());
 		if (user == null)
 			new PageAccessException(
-					getSessionContext().isHttpSessionNew() ? "Your timetabling session has expired. Please log in again." : "Login is required to use this page.");
-			if (user.getCurrentRole() == null) throw new PageAccessException("Insufficient user privileges.");
-		if (!Roles.ADMIN_ROLE.equals(user.getCurrentRole()))
+					getThreadLocalRequest().getSession().isNew() ? "Your timetabling session has expired. Please log in again." : "Login is required to use this page.");
+			if (user.getRole() == null) throw new PageAccessException("Insufficient user privileges.");
+		if (!Roles.ADMIN_ROLE.equals(user.getRole()))
 			throw new PageAccessException("Insufficient user privileges.");
 		return true;
 	}
@@ -2151,7 +2150,7 @@ public class CurriculaServlet implements CurriculaService {
 				
 				for (Curriculum c: (List<Curriculum>)hibSession.createQuery("from Curriculum where department.session.uniqueId = :sessionId").setLong("sessionId", sessionId).list()) {
 					ChangeLog.addChange(hibSession,
-							getSessionContext(),
+							getThreadLocalRequest(),
 							c,
 							c.getAbbv(),
 							Source.CURRICULA, 
@@ -2166,7 +2165,7 @@ public class CurriculaServlet implements CurriculaService {
 				
 				for (Curriculum c: (List<Curriculum>)hibSession.createQuery("from Curriculum where department.session.uniqueId = :sessionId").setLong("sessionId", sessionId).list()) {
 					ChangeLog.addChange(hibSession,
-							getSessionContext(),
+							getThreadLocalRequest(),
 							c,
 							c.getAbbv(),
 							Source.CURRICULA, 
@@ -2201,7 +2200,7 @@ public class CurriculaServlet implements CurriculaService {
 	public Boolean updateCurriculaByProjections(Set<Long> curriculumIds, boolean updateCurriculumCourses) throws CurriculaException, PageAccessException {
 		sLog.debug("updateCurriculaByProjections(curricula=" + curriculumIds + ", updateCurriculumCourses=" + updateCurriculumCourses + ")");
 		long s0 = System.currentTimeMillis();
-		UserContext user = getSessionContext().getUser();
+		User user = Web.getUser(getThreadLocalRequest().getSession());
 		try {
 			org.hibernate.Session hibSession = CurriculumDAO.getInstance().getSession();
 			Transaction tx = null;
@@ -2338,7 +2337,7 @@ public class CurriculaServlet implements CurriculaService {
 					}
 					
 					ChangeLog.addChange(hibSession,
-							getSessionContext(),
+							getThreadLocalRequest(),
 							c,
 							c.getAbbv(),
 							Source.CURRICULA, 
@@ -2456,7 +2455,7 @@ public class CurriculaServlet implements CurriculaService {
 					
 					if (oldDemand == null || demand != oldDemand) {
 						ChangeLog.addChange(hibSession,
-								getSessionContext(),
+								getThreadLocalRequest(),
 								courseOffering,
 								courseOffering.getCourseName() + " projection: " + oldDemand + " &rarr; " + demand,
 								Source.CURRICULA, 
@@ -2494,7 +2493,7 @@ public class CurriculaServlet implements CurriculaService {
 		sLog.debug("populateCourseProjectedDemands(includeOtherStudents=" + includeOtherStudents + ", offering=" + offeringId +")");
 		long s0 = System.currentTimeMillis();
 		try {
-			UserContext user = getSessionContext().getUser();
+			User user = Web.getUser(getThreadLocalRequest().getSession());
 			org.hibernate.Session hibSession = CurriculumDAO.getInstance().getSession();
 			Transaction tx = null;
 			try {
@@ -2504,7 +2503,7 @@ public class CurriculaServlet implements CurriculaService {
 				if (offering == null) throw new CurriculaException("offering " + offeringId + " does not exist");
 				
 				if (!offering.isEditableBy(user)) {
-					if (user == null || !Roles.CURRICULUM_MGR_ROLE.equals(user.getCurrentRole()) || !getManager().getDepartments().contains(offering.getDepartment()))
+					if (user == null || !Roles.CURRICULUM_MGR_ROLE.equals(user.getRole()) || !getManager().getDepartments().contains(offering.getDepartment()))
 						throw new CurriculaException("not authorized to populate course projected demands");
 				}
 				
@@ -2566,7 +2565,7 @@ public class CurriculaServlet implements CurriculaService {
 					
 					if (oldDemand == null || demand != oldDemand) {
 						ChangeLog.addChange(hibSession,
-								getSessionContext(),
+								getThreadLocalRequest(),
 								courseOffering,
 								courseOffering.getCourseName() + " projection: " + oldDemand + " &rarr; " + demand,
 								Source.CURRICULA, 
@@ -2604,20 +2603,20 @@ public class CurriculaServlet implements CurriculaService {
 	/* Support functions (lookups etc.) */
 	
 	private TimetableManager getManager() throws PageAccessException {
-		UserContext user = getSessionContext().getUser();
+		User user = Web.getUser(getThreadLocalRequest().getSession());
 		if (user == null) throw new PageAccessException(
-				getSessionContext().isHttpSessionNew() ? "Your timetabling session has expired. Please log in again." : "Login is required to use this page.");
-		if (user.getCurrentRole() == null) throw new PageAccessException("Insufficient user privileges.");
-		TimetableManager manager = TimetableManager.findByExternalId(user.getExternalUserId());
+				getThreadLocalRequest().getSession().isNew() ? "Your timetabling session has expired. Please log in again." : "Login is required to use this page.");
+		if (user.getRole() == null) throw new PageAccessException("Insufficient user privileges.");
+		TimetableManager manager = TimetableManager.getManager(user);
 		if (manager == null) throw new PageAccessException("Insufficient user privileges.");
 		return manager;
 	}
 	
 	private Long getAcademicSessionId() throws PageAccessException {
-		UserContext user = getSessionContext().getUser();
+		User user = Web.getUser(getThreadLocalRequest().getSession());
 		if (user == null) throw new PageAccessException(
-				getSessionContext().isHttpSessionNew() ? "Your timetabling session has expired. Please log in again." : "Login is required to use this page.");
-		Long sessionId = user.getCurrentAcademicSessionId();
+				getThreadLocalRequest().getSession().isNew() ? "Your timetabling session has expired. Please log in again." : "Login is required to use this page.");
+		Long sessionId = (Long) user.getAttribute(Constants.SESSION_ID_ATTR_NAME);
 		if (sessionId == null) throw new PageAccessException("No academic session is selecgted.");
 		return sessionId;
 	}

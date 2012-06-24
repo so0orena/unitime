@@ -26,7 +26,6 @@ import javax.servlet.http.HttpServlet;
 import org.unitime.commons.Debug;
 import org.unitime.timetable.model.SolverInfo;
 import org.unitime.timetable.model.dao._RootDAO;
-import org.unitime.timetable.onlinesectioning.OnlineSectioningService;
 import org.unitime.timetable.solver.remote.SolverRegisterService;
 import org.unitime.timetable.util.Constants;
 import org.unitime.timetable.util.LogCleaner;
@@ -79,9 +78,6 @@ public class InitServlet extends HttpServlet implements Servlet {
 			Debug.info(" - Cleaning Logs ...");
 			LogCleaner.cleanupLogs();
 			
-			Debug.info(" - Starting Online Sectioning Service ...");
-			OnlineSectioningService.startService();
-			
 			Debug.info("******* UniTime " + Constants.getVersion() +
 					" build on " + Constants.getReleaseDate() + " initialized successfully *******");
 
@@ -101,9 +97,6 @@ public class InitServlet extends HttpServlet implements Servlet {
 					" build on " + Constants.getReleaseDate() + " is going down *******");
 		
 			super.destroy();
-			
-			Debug.info(" - Stopping Online Sectioning Service ...");
-			OnlineSectioningService.stopService();
 		
 			Debug.info(" - Stopping Solver Register ... ");							
 			SolverRegisterService.stopService();

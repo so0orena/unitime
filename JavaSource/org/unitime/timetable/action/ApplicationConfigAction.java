@@ -33,7 +33,6 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.MessageResources;
 import org.hibernate.criterion.Order;
-import org.springframework.stereotype.Service;
 import org.unitime.commons.web.Web;
 import org.unitime.commons.web.WebTable;
 import org.unitime.timetable.ApplicationProperties;
@@ -50,7 +49,6 @@ import org.unitime.timetable.model.dao.ApplicationConfigDAO;
  * XDoclet definition:
  * @struts:action path="/applicationConfig" name="applicationConfigForm" input="/admin/applicationConfig.jsp" scope="request"
  */
-@Service("/applicationConfig")
 public class ApplicationConfigAction extends Action {
 
     // --------------------------------------------------------- Instance Variables

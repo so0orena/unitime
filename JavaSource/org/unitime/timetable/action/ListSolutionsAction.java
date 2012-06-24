@@ -40,7 +40,6 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.stereotype.Service;
 import org.unitime.commons.Debug;
 import org.unitime.commons.User;
 import org.unitime.commons.web.Web;
@@ -67,7 +66,6 @@ import net.sf.cpsolver.ifs.util.CSVFile;
 /** 
  * @author Tomas Muller
  */
-@Service("/listSolutions")
 public class ListSolutionsAction extends Action {
 	private static SimpleDateFormat sDF = new SimpleDateFormat("MM/dd/yy hh:mmaa");
 

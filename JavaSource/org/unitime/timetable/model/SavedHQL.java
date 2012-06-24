@@ -25,10 +25,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.unitime.commons.User;
 import org.unitime.timetable.model.base.BaseSavedHQL;
 import org.unitime.timetable.model.dao.SavedHQLDAO;
-import org.unitime.timetable.model.dao.SessionDAO;
-import org.unitime.timetable.spring.UserContext;
 
 public class SavedHQL extends BaseSavedHQL {
 	private static final long serialVersionUID = 2532519378106863655L;
@@ -55,16 +54,15 @@ public class SavedHQL extends BaseSavedHQL {
 	}
 	
 	private static interface OptionImplementation {
-		public Map<Long, String> getValues(UserContext user);
+		public Map<Long, String> getValues(User user);
 		
 	}
 	
 	public static enum Option {
 		SESSION("Academic Session", false, false, new OptionImplementation() {
 			@Override
-			public Map<Long, String> getValues(UserContext user) {
-				Long sessionId = user.getCurrentAcademicSessionId();
-				Session session = (sessionId == null ? null : SessionDAO.getInstance().get(sessionId));
+			public Map<Long, String> getValues(User user) {
+				Session session = Session.getCurrentAcadSession(user);
 				if (session == null) return null;
 				Map<Long, String> ret = new Hashtable<Long, String>();
 				ret.put(session.getUniqueId(), session.getLabel());
@@ -73,14 +71,13 @@ public class SavedHQL extends BaseSavedHQL {
 		}),
 		DEPARTMENT("Department", true, false, new OptionImplementation() {
 			@Override
-			public Map<Long, String> getValues(UserContext user) {
-				Long sessionId = user.getCurrentAcademicSessionId();
-				Session session = (sessionId == null ? null : SessionDAO.getInstance().get(sessionId));
+			public Map<Long, String> getValues(User user) {
+				Session session = Session.getCurrentAcadSession(user);
 				if (session == null) return null;
-				TimetableManager manager = TimetableManager.findByExternalId(user.getExternalUserId());
+				TimetableManager manager = TimetableManager.getManager(user);
 				if (manager == null) return null;
 				Map<Long, String> ret = new Hashtable<Long, String>();
-				if (Roles.ADMIN_ROLE.equals(user.getCurrentRole())) {
+				if (user.isAdmin()) {
 					for (Department d: (Set<Department>)Department.findAll(session.getUniqueId()))
 						ret.put(d.getUniqueId(), d.htmlLabel());
 				} else {
@@ -93,7 +90,7 @@ public class SavedHQL extends BaseSavedHQL {
 		DEPARTMENTS("Departments", true, true, DEPARTMENT.iImplementation),
 		SUBJECT("Subject Area", true, false, new OptionImplementation() {
 			@Override
-			public Map<Long, String> getValues(UserContext user) {
+			public Map<Long, String> getValues(User user) {
 				Map<Long, String> ret = new Hashtable<Long, String>();
 				try {
 					for (SubjectArea s: (Set<SubjectArea>)TimetableManager.getSubjectAreas(user)) {
@@ -106,10 +103,10 @@ public class SavedHQL extends BaseSavedHQL {
 		SUBJECTS("Subject Areas", true, true, SUBJECT.iImplementation),
 		BUILDING("Buildings", true, false, new OptionImplementation() {
 			@Override
-			public Map<Long, String> getValues(UserContext user) {
-				Long sessionId = user.getCurrentAcademicSessionId();
-				Session session = (sessionId == null ? null : SessionDAO.getInstance().get(sessionId));
-				TimetableManager manager = TimetableManager.findByExternalId(user.getExternalUserId());
+			public Map<Long, String> getValues(User user) {
+				Session session = Session.getCurrentAcadSession(user);
+				if (session == null) return null;
+				TimetableManager manager = TimetableManager.getManager(user);
 				if (manager == null) return null;
 				Map<Long, String> ret = new Hashtable<Long, String>();
 				for (Building b: (List<Building>)Building.findAll(session.getUniqueId()))
@@ -120,10 +117,10 @@ public class SavedHQL extends BaseSavedHQL {
 		BUILDINGS("Buildings", true, true, BUILDING.iImplementation),
 		ROOM("Room", true, false, new OptionImplementation() {
 			@Override
-			public Map<Long, String> getValues(UserContext user) {
-				Long sessionId = user.getCurrentAcademicSessionId();
-				Session session = (sessionId == null ? null : SessionDAO.getInstance().get(sessionId));
-				TimetableManager manager = TimetableManager.findByExternalId(user.getExternalUserId());
+			public Map<Long, String> getValues(User user) {
+				Session session = Session.getCurrentAcadSession(user);
+				if (session == null) return null;
+				TimetableManager manager = TimetableManager.getManager(user);
 				if (manager == null) return null;
 				Map<Long, String> ret = new Hashtable<Long, String>();
 				for (Room r: (List<Room>)Room.findAllRooms(session.getUniqueId())){
@@ -147,7 +144,7 @@ public class SavedHQL extends BaseSavedHQL {
 		public String text() { return iName; }
 		public boolean allowSingleSelection() { return iAllowSelection; }
 		public boolean allowMultiSelection() { return iAllowSelection && iMultiSelect; }
-		public Map<Long, String> values(UserContext user) { return iImplementation.getValues(user); }
+		public Map<Long, String> values(User user) { return iImplementation.getValues(user); }
 	}
 	
 	public static void main(String args[]) {

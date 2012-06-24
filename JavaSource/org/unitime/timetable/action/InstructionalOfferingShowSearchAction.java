@@ -31,7 +31,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.hibernate.HibernateException;
-import org.springframework.stereotype.Service;
 import org.unitime.commons.Debug;
 import org.unitime.commons.web.Web;
 import org.unitime.timetable.form.InstructionalOfferingListForm;
@@ -44,7 +43,7 @@ import org.unitime.timetable.webutil.BackTracker;
 /**
  * @author Stephanie Schluttenhofer
  */
-@Service("/instructionalOfferingShowSearch")
+
 public class InstructionalOfferingShowSearchAction extends Action {
 
 	/** 

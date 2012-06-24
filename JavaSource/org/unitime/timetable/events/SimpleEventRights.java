@@ -24,8 +24,10 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.unitime.commons.User;
 import org.unitime.localization.impl.Localization;
 import org.unitime.timetable.ApplicationProperties;
+import org.unitime.timetable.gwt.command.server.GwtRpcHelper;
 import org.unitime.timetable.gwt.resources.GwtMessages;
 import org.unitime.timetable.gwt.shared.EventInterface.EventType;
 import org.unitime.timetable.gwt.shared.PageAccessException;
@@ -35,20 +37,18 @@ import org.unitime.timetable.model.Meeting;
 import org.unitime.timetable.model.Roles;
 import org.unitime.timetable.model.Session;
 import org.unitime.timetable.model.dao.SessionDAO;
-import org.unitime.timetable.spring.SessionContext;
-import org.unitime.timetable.spring.UserContext;
 
 public class SimpleEventRights implements EventRights {
 	private static final long serialVersionUID = 1L;
 	
 	protected static GwtMessages MESSAGES = Localization.create(GwtMessages.class);
 	
-	private UserContext iUser;
+	private User iUser;
 	private boolean iHttpSessionNew = false;
 	private Date iToday, iBegin, iEnd;
 	private Long iSessionId;
 	
-	public SimpleEventRights(UserContext user, boolean isHttpSessionNew, Long sessionId) {
+	public SimpleEventRights(User user, boolean isHttpSessionNew, Long sessionId) {
 		iUser = user;
 		iHttpSessionNew = isHttpSessionNew;
 		iSessionId = sessionId;
@@ -68,11 +68,11 @@ public class SimpleEventRights implements EventRights {
 		}
 	}
 	
-	public SimpleEventRights(SessionContext context, Long sessionId) {
-		this(context.getUser(), context.isHttpSessionNew(), (sessionId != null ? sessionId : context.isAuthenticated() ? context.getUser().getCurrentAcademicSessionId() : null));
+	public SimpleEventRights(GwtRpcHelper helper, Long sessionId) {
+		this(helper.getUser(), helper.isHttpSessionNew(), (sessionId == null ? helper.getAcademicSessionId() : sessionId));
 	}
 	
-	protected UserContext getUser() {
+	protected User getUser() {
 		return iUser;
 	}
 	
@@ -81,7 +81,7 @@ public class SimpleEventRights implements EventRights {
 	}
 	
 	protected boolean isAdmin() {
-		return getUser() != null && Roles.ADMIN_ROLE.equals(getUser().getCurrentRole());
+		return getUser() != null && Roles.ADMIN_ROLE.equals(getUser().getRole());
 	}
 	
 	protected boolean isAuthenticated() {
@@ -89,7 +89,7 @@ public class SimpleEventRights implements EventRights {
 	}
 	
 	protected boolean hasRole() {
-		return getUser() != null && getUser().getCurrentRole() != null && hasSession();
+		return getUser() != null && getUser().getRole() != null && hasSession();
 	}
 	
 	private Set<Long> iManagedSessions = null;
@@ -102,19 +102,19 @@ public class SimpleEventRights implements EventRights {
 	}
 	
 	protected boolean isEventManager() {
-		return getUser() != null && Roles.EVENT_MGR_ROLE.equals(getUser().getCurrentRole()) && hasSession();
+		return getUser() != null && Roles.EVENT_MGR_ROLE.equals(getUser().getRole()) && hasSession();
 	}
 	
 	protected boolean isStudentAdvisor() {
-		return getUser() != null && Roles.STUDENT_ADVISOR.equals(getUser().getCurrentRole()) && hasSession();
+		return getUser() != null && Roles.STUDENT_ADVISOR.equals(getUser().getRole()) && hasSession();
 	}
 
 	protected boolean isScheduleManager() {
-		return getUser() != null && Roles.DEPT_SCHED_MGR_ROLE.equals(getUser().getCurrentRole()) && hasSession();
+		return getUser() != null && Roles.DEPT_SCHED_MGR_ROLE.equals(getUser().getRole()) && hasSession();
 	}
 
 	protected String getUserId() {
-		return getUser() == null ? null : getUser().getExternalUserId();
+		return getUser() == null ? null : getUser().getId();
 	}
 	
 	@Override

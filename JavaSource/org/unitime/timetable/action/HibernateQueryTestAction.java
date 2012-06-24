@@ -52,7 +52,6 @@ import org.hibernate.hql.QueryExecutionRequestException;
 import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.type.CollectionType;
 import org.hibernate.type.Type;
-import org.springframework.stereotype.Service;
 import org.unitime.commons.Debug;
 import org.unitime.commons.hibernate.util.HibernateUtil;
 import org.unitime.commons.hibernate.util.PrettyFormatter;
@@ -69,7 +68,6 @@ import org.unitime.timetable.model.dao._RootDAO;
  * XDoclet definition:
  * @struts:action path="/hibernateQueryTest" name="hibernateQueryTestForm" input="/form/hibernateQueryTest.jsp" scope="request"
  */
-@Service("/hibernateQueryTest")
 public class HibernateQueryTestAction extends Action {
 
     // --------------------------------------------------------- Instance Variables

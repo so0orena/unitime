@@ -159,7 +159,7 @@
 
 	  <action
          path="/getCourseNumbers"
-         type="org.springframework.web.struts.DelegatingActionProxy"
+         type="org.unitime.timetable.action.ajax.CourseNumSuggestAction"
          scope="request"
          validate="false" />
          
@@ -169,7 +169,7 @@
          name="sessionEditForm"
          parameter="doit"
          scope="request"
-         type="org.springframework.web.struts.DelegatingActionProxy"
+         type="org.unitime.timetable.action.SessionEditAction"
          validate="false">
          <forward name="showEdit" path="sessionEditTile" />
          <forward name="showAdd" path="sessionAddTile" />
@@ -185,7 +185,7 @@
          input="sessionListTile"
          name="sessionListForm"
          scope="request"
-         type="org.springframework.web.struts.DelegatingActionProxy"
+         type="org.unitime.timetable.action.SessionListAction"
          validate="false">
          <forward name="showSessionList" path="sessionListTile" />
       </action>
@@ -196,7 +196,7 @@
          name="distributionTypeEditForm"
          parameter="do"
          scope="request"
-         type="org.springframework.web.struts.DelegatingActionProxy">
+         type="org.unitime.timetable.action.DistributionTypeEditAction">
          <forward name="showEdit" path="distributionTypeEditTile" />
          <forward
             name="showDistributionTypeList"
@@ -209,7 +209,7 @@
          input="distributionTypeListTile"
          name="distributionTypeListForm"
          scope="request"
-         type="org.springframework.web.struts.DelegatingActionProxy"
+         type="org.unitime.timetable.action.DistributionTypeListAction"
          validate="false">
          <forward name="showDistributionTypeList" path="distributionTypeListTile" />
       </action> 
@@ -220,13 +220,13 @@
          input="subjectListTile"
          name="subjectListForm"
          scope="request"
-         type="org.springframework.web.struts.DelegatingActionProxy">
+         type="org.unitime.timetable.action.SubjectListAction">
          <forward name="showSubjectList" path="subjectListTile" />
       </action>
 
       <action
       	path="/subjectAreaEdit"
-	    type="org.springframework.web.struts.DelegatingActionProxy"
+	    type="org.unitime.timetable.action.SubjectAreaEditAction"
 	    attribute="subjectAreaEditForm"
 	    input="subjectAreaEditTile"
 	    name="subjectAreaEditForm"
@@ -249,7 +249,7 @@
          input="buildingListTile"
          name="buildingListForm"
          scope="request"
-         type="org.springframework.web.struts.DelegatingActionProxy">
+         type="org.unitime.timetable.action.BuildingListAction">
          <forward name="showBuildingList" path="buildingListTile" />
       </action>
 
@@ -260,7 +260,7 @@
          name="roomListForm"
          scope="request"
          validate="false"
-         type="org.springframework.web.struts.DelegatingActionProxy">
+         type="org.unitime.timetable.action.RoomListAction">
          <forward name="showRoomList" path="roomListTile" />         
          <forward name="showRoomSearch" path="/roomSearch.do" />
       </action>
@@ -271,7 +271,7 @@
          input="departmentListTile"
          name="departmentListForm"
          scope="request"
-         type="org.springframework.web.struts.DelegatingActionProxy">
+         type="org.unitime.timetable.action.DepartmentListAction">
          <forward name="showDepartmentList" path="departmentListTile" />
       </action>
 
@@ -281,7 +281,7 @@
          input="selectPrimaryRoleTile"
          name="roleListForm"
          scope="request"
-         type="org.springframework.web.struts.DelegatingActionProxy"
+         type="org.unitime.timetable.action.RoleListAction"
          validate="false">
          <forward
             name="getUserSelectedRole"
@@ -306,7 +306,7 @@
 
       <action
          path="/loginRequired"
-         type="org.springframework.web.struts.DelegatingActionProxy"
+         type="org.unitime.timetable.action.TilesRedirectAction"
          scope="request"
          validate="false">
          <forward
@@ -321,11 +321,43 @@
          name="roomFeatureListForm"
          parameter="doit"
          scope="request"
-         type="org.springframework.web.struts.DelegatingActionProxy">
+         type="org.unitime.timetable.action.RoomFeatureListAction">
          <forward name="showRoomFeatureList" path="roomFeatureListTile" />         
          <forward name="showAdd" path="/roomFeatureEdit.do" />
       </action>  
 
+ <!--      
+	<action 
+         path="/globalRoomFeatureEdit"
+         name="globalRoomFeatureEditForm"
+         attribute="roomFeatureEditForm"
+         input="globalRoomFeatureEditTile"
+         parameter="doit"
+         scope="request"
+         type="org.unitime.timetable.action.RoomFeatureEditAction" >
+         <forward name="showEdit" path="globalRoomFeatureEditTile" />
+         <forward name="showAdd" path="globalRoomFeatureEditTile" />
+         <forward
+            name="showRoomFeatureList"
+            path="/roomFeatureList.do"
+            redirect="true" />
+      </action> 
+           
+	<action
+         path="/managerRoomFeatureEdit"
+         name="managerRoomFeatureEditForm"
+         attribute="roomFeatureEditForm"
+         parameter="doit"
+         scope="request"
+         type="org.unitime.timetable.action.RoomFeatureEditAction">
+         <forward name="showEdit" path="managerRoomFeatureEditTile" />
+         <forward name="showAdd" path="managerRoomFeatureEditTile" />
+         <forward
+            name="showRoomFeatureList"
+            path="/roomFeatureList.do"
+            redirect="true" />
+      </action>
+-->
 	  <action
          path="/roomFeatureEdit"
          name="roomFeatureEditForm"
@@ -333,7 +365,7 @@
          parameter="doit"
          scope="request"
          validate="false"
-         type="org.springframework.web.struts.DelegatingActionProxy">
+         type="org.unitime.timetable.action.RoomFeatureEditAction">
          <forward name="showEdit" path="roomFeatureEditTile" />
          <forward name="showAdd" path="roomFeatureEditTile" />
          <forward name="showRoomFeatureList" path="/roomFeatureList.do" />
@@ -341,7 +373,7 @@
 
       <action
          path="/timetableManagerEdit"
-         type="org.springframework.web.struts.DelegatingActionProxy"
+         type="org.unitime.timetable.action.TimetableManagerEditAction"
          attribute="mgrForm"
          input="mgrAddTile"
          name="mgrForm"
@@ -366,7 +398,7 @@
 
       <action
          path="/timetableManagerList"
-         type="org.springframework.web.struts.DelegatingActionProxy"
+         type="org.unitime.timetable.action.TimetableManagerListAction"
          validate="false">
          <forward
             name="success"
@@ -385,7 +417,7 @@
          name="instructionalOfferingListForm"
          parameter="doit"
          scope="request"
-         type="org.springframework.web.struts.DelegatingActionProxy"
+         type="org.unitime.timetable.action.InstructionalOfferingSearchAction"
          validate="false">
         <forward 
         	name="showInstructionalOfferingList" 
@@ -406,7 +438,7 @@
       
       <action
          path="/instructionalOfferingShowSearch"
-         type="org.springframework.web.struts.DelegatingActionProxy"
+         type="org.unitime.timetable.action.InstructionalOfferingShowSearchAction"
          attribute="instructionalOfferingListForm"
          input="instructionalOfferingSearchTile"
          name="instructionalOfferingListForm"
@@ -420,14 +452,14 @@
         	path="instructionalOfferingSearchTile" />
       </action>
 
-	  <action
+      <action
          path="/instructionalOfferingChange"
          attribute="instructionalOfferingListForm"
          input="instructionalOfferingListTile"
          name="instructionalOfferingListForm"
          parameter="doit"
          scope="request"
-         type="org.springframework.web.struts.DelegatingActionProxy"
+         type="org.unitime.timetable.action.InstructionalOfferingSearchAction"
          validate="false">
         <forward 
         	name="showInstructionalOfferingList" 
@@ -443,7 +475,7 @@
          input="instructionalOfferingListTile"
          name="instructionalOfferingListForm"
          scope="request"
-         type="org.springframework.web.struts.DelegatingActionProxy"
+         type="org.unitime.timetable.action.InstructionalOfferingListAction"
          validate="false">
          <forward 
          	name="showInstructionalOfferingList" 
@@ -452,7 +484,7 @@
 
       <action
          path="/instructionalOfferingConfigEdit"
-         type="org.springframework.web.struts.DelegatingActionProxy"
+         type="org.unitime.timetable.action.InstructionalOfferingConfigEditAction"
          attribute="instructionalOfferingConfigEditForm"
          input="instructionalOfferingConfigEditTile"
          name="instructionalOfferingConfigEditForm"
@@ -476,7 +508,7 @@
       
       <action
          path="/crossListsModify"
-         type="org.springframework.web.struts.DelegatingActionProxy"
+         type="org.unitime.timetable.action.CrossListsModifyAction"
          attribute="crossListsModifyForm"
          input="crossListsModifyTile"
          name="crossListsModifyForm"
@@ -492,7 +524,7 @@
  
       <action
          path="/instructionalOfferingModify"
-         type="org.springframework.web.struts.DelegatingActionProxy"
+         type="org.unitime.timetable.action.InstructionalOfferingModifyAction"
          attribute="instructionalOfferingModifyForm"
          input="instructionalOfferingModifyTile"
          name="instructionalOfferingModifyForm"
@@ -508,7 +540,7 @@
       
       <action
          path="/schedulingSubpartEdit"
-         type="org.springframework.web.struts.DelegatingActionProxy"
+         type="org.unitime.timetable.action.SchedulingSubpartEditAction"
          attribute="SchedulingSubpartEditForm"
          input="schedulingSubpartEditTile"
          name="schedulingSubpartEditForm"
@@ -531,7 +563,7 @@
   
       <action 
       	path="/preferenceLevelList" 
-      	type="org.springframework.web.struts.DelegatingActionProxy"
+      	type="org.unitime.timetable.action.PreferenceLevelListAction"
         validate="false">
          <forward
             name="success"
@@ -545,7 +577,7 @@
       
       <action 
       	path="/itypeDescList" 
-      	type="org.springframework.web.struts.DelegatingActionProxy" 
+      	type="org.unitime.timetable.action.ItypeDescListAction" 
       	validate="false">
         <forward
             name="success"
@@ -563,7 +595,7 @@
          path="/instructorSearch"
          scope="request"
          validate="false"
-         type="org.springframework.web.struts.DelegatingActionProxy">
+         type="org.unitime.timetable.action.InstructorSearchAction">
          <forward name="showInstructorSearch" path="instructorSearchTile" />
          <forward name="showInstructorList" path="instructorListTile" />
          <forward name="instructorList" path="/instructorList.do" />
@@ -576,14 +608,14 @@
          path="/instructorList"
          scope="request"
          validate="false"
-         type="org.springframework.web.struts.DelegatingActionProxy">
+         type="org.unitime.timetable.action.InstructorListAction">
          <forward name="showInstructorList" path="instructorListTile" />
          <forward name="showInstructorSearch" path="/instructorSearch.do" />
       </action>
       
       <action
          path="/managerSettings"
-         type="org.springframework.web.struts.DelegatingActionProxy"
+         type="org.unitime.timetable.action.ManagerSettingsAction"
          attribute="mgrSettingsForm"
          input="managerSettingsTile"
          name="mgrSettingsForm"
@@ -601,7 +633,7 @@
       
       <action
          path="/settings"
-         type="org.springframework.web.struts.DelegatingActionProxy"
+         type="org.unitime.timetable.action.SettingsAction"
          attribute="settingsForm"
          input="settingsTile"
          name="settingsForm"
@@ -614,7 +646,7 @@
       
       <action
       	path="/solverParamGroups"
-      	type="org.springframework.web.struts.DelegatingActionProxy"
+      	type="org.unitime.timetable.action.SolverParamGroupsAction"
       	attribute="solverParamGroupsForm"
 		input="solverParamGroupsTile"
 		name="solverParamGroupsForm"
@@ -627,7 +659,7 @@
 	  
 	  <action
 	  	path="/solverParamDef"
-	  	type="org.springframework.web.struts.DelegatingActionProxy"
+	  	type="org.unitime.timetable.action.SolverParamDefAction"
 	  	attribute="solverParamDefForm"
 	  	input="solverParamDefTile"
 	  	name="solverParamDefForm"
@@ -640,7 +672,7 @@
       
       <action
       	path="/solverSettings"
-      	type="org.springframework.web.struts.DelegatingActionProxy"
+      	type="org.unitime.timetable.action.SolverSettingsAction"
       	attribute="solverSettingsForm"
       	input="solverSettingsTile"
       	name="solverSettingsForm"
@@ -653,7 +685,7 @@
         
         <action
 			path="/solverInfoDef"
-			type="org.springframework.web.struts.DelegatingActionProxy"
+			type="org.unitime.timetable.action.SolverInfoDefAction"
 			attribute="solverInfoDefForm"
 			input="solverInfoDefTile"
 			name="solverInfoDefForm"
@@ -667,7 +699,7 @@
 	    
 	<action
 		path="/listSolutions"
-		type="org.springframework.web.struts.DelegatingActionProxy"
+		type="org.unitime.timetable.action.ListSolutionsAction"
 		attribute="listSolutionsForm"
 		input="listSolutionsTile"
 		name="listSolutionsForm"
@@ -682,7 +714,7 @@
     
     <action
     	path="/solverLog"
-    	type="org.springframework.web.struts.DelegatingActionProxy"
+    	type="org.unitime.timetable.action.SolverLogAction"
     	attribute="solverLogForm"
     	input="solverLogTile"
     	name="solverLogForm"
@@ -695,7 +727,7 @@
     </action>
     <action
     	path="/solver"
-    	type="org.springframework.web.struts.DelegatingActionProxy"
+    	type="org.unitime.timetable.action.SolverAction"
     	attribute="solverForm"
     	input="solverTile"
     	name="solverForm"
@@ -708,7 +740,7 @@
     </action>
     <action
 		path="/manageSolvers"
-		type="org.springframework.web.struts.DelegatingActionProxy"
+		type="org.unitime.timetable.action.ManageSolversAction"
 		attribute="manageSolversForm"
 		input="manageSolversTile"
 		name="manageSolversForm"
@@ -733,7 +765,7 @@
     </action>
     <action
     	path="/cbs"
-    	type="org.springframework.web.struts.DelegatingActionProxy"
+    	type="org.unitime.timetable.action.CbsAction"
     	attribute="cbsForm"
     	input="cbsTile"
     	name="cbsForm"
@@ -746,7 +778,7 @@
     </action>
     <action
     	path="/timetable"
-		type="org.springframework.web.struts.DelegatingActionProxy"
+		type="org.unitime.timetable.action.TimetableAction"
 		attribute="timetableForm"
 		input="timetableTile"
 		name="timetableForm"
@@ -759,7 +791,7 @@
     </action>
     <action
     	path="/unassigned"
-    	type="org.springframework.web.struts.DelegatingActionProxy"
+    	type="org.unitime.timetable.action.UnassignedAction"
     	attribute="unassignedForm"
     	input="unassignedTile"
     	name="unassignedForm"
@@ -772,7 +804,7 @@
     </action>
     <action
     	path="/suggestions"
-    	type="org.springframework.web.struts.DelegatingActionProxy"
+    	type="org.unitime.timetable.action.SuggestionsAction"
     	attribute="suggestionsForm"
     	input="suggestionsTile"
     	name="suggestionsForm"
@@ -790,7 +822,7 @@
   
     <action
          path="/classEdit"
-         type="org.springframework.web.struts.DelegatingActionProxy"
+         type="org.unitime.timetable.action.ClassEditAction"
          attribute="ClassEditForm"
          input="classEditTile"
          name="classEditForm"
@@ -821,7 +853,7 @@
          name="classListForm"
          parameter="doit"
          scope="request"
-         type="org.springframework.web.struts.DelegatingActionProxy"
+         type="org.unitime.timetable.action.ClassSearchAction"
          validate="false">
         <forward 
         	name="showClassList" 
@@ -836,7 +868,7 @@
       
       <action
          path="/classShowSearch"
-         type="org.springframework.web.struts.DelegatingActionProxy"
+         type="org.unitime.timetable.action.ClassShowSearchAction"
          attribute="classListForm"
          input="classSearchTile"
          name="classListForm"
@@ -857,7 +889,7 @@
          name="classListForm"
          parameter="doit"
          scope="request"
-         type="org.springframework.web.struts.DelegatingActionProxy"
+         type="org.unitime.timetable.action.ClassSearchAction"
          validate="false">
         <forward name="showClassList" path="classListTile" />
         <forward name="showClassSearch" path="classSearchTile" />
@@ -869,7 +901,7 @@
          input="classListTile"
          name="classListForm"
          scope="request"
-         type="org.springframework.web.struts.DelegatingActionProxy"
+         type="org.unitime.timetable.action.ClassListAction"
          validate="false">
          <forward 
          	name="showClassList" 
@@ -878,7 +910,7 @@
      
       <action
          path="/distributionPrefs"
-         type="org.springframework.web.struts.DelegatingActionProxy"
+         type="org.unitime.timetable.action.DistributionPrefsAction"
          attribute="distributionPrefsForm"
          input="distributionPrefsTile"
          name="distributionPrefsForm"
@@ -897,7 +929,7 @@
       
       <action
          path="/hibernateQueryTest"
-         type="org.springframework.web.struts.DelegatingActionProxy"
+         type="org.unitime.timetable.action.HibernateQueryTestAction"
          attribute="hibernateQueryTestForm"
          input="hibernateQueryTestTile"
          name="hibernateQueryTestForm"
@@ -908,6 +940,22 @@
         	path="hibernateQueryTestTile" />
       </action>
       
+      <action
+         path="/classOwnerChange"
+         type="org.unitime.timetable.action.ClassOwnerChangeAction"
+         attribute="classOwnerChangeForm"
+         input="classOwnerChangeTile"
+         name="classOwnerChangeForm"
+         scope="request"
+         validate="false">
+         <forward 
+         	name="ownerChange" 
+         	path="classOwnerChangeTile" />
+         <forward 
+         	name="editClass" 
+         	path="/classEdit.do" />
+      </action>
+      
         <action
          path="/classAssignmentsReportSearch"
          attribute="classAssignmentsReportForm"
@@ -915,7 +963,7 @@
          name="classAssignmentsReportForm"
          parameter="doit"
          scope="request"
-         type="org.springframework.web.struts.DelegatingActionProxy"
+         type="org.unitime.timetable.action.ClassAssignmentsReportSearchAction"
          validate="false">
         <forward 
         	name="showClassAssignmentsReportList" 
@@ -930,7 +978,7 @@
       
       <action
          path="/classAssignmentsReportShowSearch"
-         type="org.springframework.web.struts.DelegatingActionProxy"
+         type="org.unitime.timetable.action.ClassAssignmentsReportShowSearchAction"
          attribute="classAssignmentsReportForm"
          input="classAssignmentsReportSearchTile"
          name="classAssignmentsReportForm"
@@ -945,26 +993,26 @@
         	path="classAssignmentsReportListTile" />
       </action>
 
-	  <action
+      <action
          path="/classAssignmentsReportChange"
          attribute="classAssignmentsReportForm"
          input="classAssignmentsReportListTile"
          name="classAssignmentsReportForm"
          parameter="doit"
          scope="request"
-         type="org.springframework.web.struts.DelegatingActionProxy"
+         type="org.unitime.timetable.action.ClassAssignmentsReportSearchAction"
          validate="false">
         <forward name="showClassAssignmentsReportList" path="classAssignmentsReportListTile" />
         <forward name="showClassAssignmentsReportSearch" path="classAssignmentsReportSearchTile" />
       </action>
-	
+
      <action
          path="/classAssignmentsReportList"
          attribute="classAssignmentsReportForm"
          input="classAssignmentsReportListTile"
          name="classAssignmentsReportForm"
          scope="request"
-         type="org.springframework.web.struts.DelegatingActionProxy"
+         type="org.unitime.timetable.action.ClassAssignmentsReportListAction"
          validate="false">
          <forward 
          	name="showClassAssignmentsReportList" 
@@ -981,7 +1029,7 @@
       	input="assignmentHistoryTile"
       	name="assignmentHistoryForm"
       	scope="request"
-      	type="org.springframework.web.struts.DelegatingActionProxy"
+      	type="org.unitime.timetable.action.AssignmentHistoryAction"
       	validate="false">
       	<forward
       		name="showAssignmentHistory"
@@ -994,7 +1042,7 @@
       	input="solutionChangesTile"
       	name="solutionChangesForm"
       	scope="request"
-      	type="org.springframework.web.struts.DelegatingActionProxy"
+      	type="org.unitime.timetable.action.SolutionChangesAction"
       	validate="false">
       	<forward 
       		name="showSolutionChanges"
@@ -1007,7 +1055,7 @@
     	  input="assignedClassesTile"
     	  name="assignedClassesForm"
     	  scope="request"
-    	  type="org.springframework.web.struts.DelegatingActionProxy"
+    	  type="org.unitime.timetable.action.AssignedClassesAction"
     	  validate="false">
     	  <forward 
     	  	name="showAssignedClasses" path="assignedClassesTile" />
@@ -1019,7 +1067,7 @@
 	      input="solutionReportTile"
 	      name="solutionReportForm"
 	      scope="request"
-	      type="org.springframework.web.struts.DelegatingActionProxy" 
+	      type="org.unitime.timetable.action.SolutionReportAction" 
 	      validate="false">
     	  <forward 
     	  	name="showSolutionReport" path="solutionReportTile" />
@@ -1031,7 +1079,7 @@
 	      input="timePatternsTile"
 	      name="timePatternEditForm"
 	      scope="request"
-	      type="org.springframework.web.struts.DelegatingActionProxy" 
+	      type="org.unitime.timetable.action.TimePatternEditAction" 
 	      validate="false">
 	      <forward name="list" path="timePatternsTile" />
 	      <forward name="add" path="addTimePatternTile" />
@@ -1044,7 +1092,7 @@
 	      input="solverGroupTile"
 	      name="solverGroupEditForm"
 	      scope="request"
-	      type="org.springframework.web.struts.DelegatingActionProxy" 
+	      type="org.unitime.timetable.action.SolverGroupEditAction" 
 	      validate="false">
 	      <forward name="list" path="solverGroupTile" />
 	      <forward name="add" path="solverGroupAddTile" />
@@ -1053,7 +1101,7 @@
 
       	<action
           path="/instructionalOfferingDetail"
-          type="org.springframework.web.struts.DelegatingActionProxy"
+          type="org.unitime.timetable.action.InstructionalOfferingDetailAction"
           attribute="instructionalOfferingDetailForm"
           input="instructionalOfferingDetailTile"
           name="instructionalOfferingDetailForm"
@@ -1079,7 +1127,7 @@
       name="schedulingSubpartEditForm"
       path="/schedulingSubpartDetail"
       scope="request"
-      type="org.springframework.web.struts.DelegatingActionProxy"
+      type="org.unitime.timetable.action.SchedulingSubpartDetailAction"
       validate="false">
       <forward name="instructionalOfferingSearch" path="/instructionalOfferingSearch.do" />
       <forward name="displaySchedulingSubpart" path="schedulingSubpartDetailTile" />
@@ -1092,7 +1140,7 @@
       name="classEditForm"
       path="/classDetail"
       scope="request"
-      type="org.springframework.web.struts.DelegatingActionProxy"
+      type="org.unitime.timetable.action.ClassDetailAction"
       validate="false">
       <forward 
        	name="displayClass" 
@@ -1115,7 +1163,7 @@
       parameter="doit"
       path="/instructorChange"
       scope="request"
-      type="org.springframework.web.struts.DelegatingActionProxy"
+      type="org.unitime.timetable.action.InstructorSearchAction"
       validate="false">
       <forward name="showInstructorList" path="instructorListTile" />
       <forward name="showInstructorSearch" path="instructorSearchTile" />
@@ -1127,7 +1175,7 @@
       name="datePatternEditForm"
       path="/datePatternEdit"
       scope="request"
-      type="org.springframework.web.struts.DelegatingActionProxy" 
+      type="org.unitime.timetable.action.DatePatternEditAction" 
       validate="false">
       <forward name="list" path="datePatternsTile" />
       <forward name="add" path="addDatePatternTile" />
@@ -1141,7 +1189,7 @@
       parameter="doit"
       path="/roomGroupList"
       scope="request"
-      type="org.springframework.web.struts.DelegatingActionProxy">
+      type="org.unitime.timetable.action.RoomGroupListAction">
       <forward name="showRoomGroupList" path="roomGroupListTile" />
       <forward name="showAdd" path="/roomGroupEdit.do" />
     </action>
@@ -1154,7 +1202,7 @@
       path="/roomGroupEdit"
       scope="request"
       validate="false"
-      type="org.springframework.web.struts.DelegatingActionProxy">
+      type="org.unitime.timetable.action.RoomGroupEditAction">
       <forward name="showRoomGroupList" path="/roomGroupList.do" />
       <forward name="showEdit" path="roomGroupEditTile" />
       <forward name="showAdd" path="roomGroupEditTile" />
@@ -1167,7 +1215,7 @@
       parameter="doit"
       path="/roomDeptList"
       scope="request"
-      type="org.springframework.web.struts.DelegatingActionProxy">
+      type="org.unitime.timetable.action.RoomDeptListAction">
       <forward name="showRoomDeptList" path="roomDeptListTile" />
     </action>
 
@@ -1179,7 +1227,7 @@
       path="/roomDeptEdit"
       scope="request"
       validate="false"
-      type="org.springframework.web.struts.DelegatingActionProxy">
+      type="org.unitime.timetable.action.RoomDeptEditAction">
       <forward name="show" path="roomDeptEditTile" />
       <forward name="back" path="/roomList.do" />
     </action>
@@ -1191,7 +1239,7 @@
       path="/addNonUnivLocation"
       scope="request"
       validate="false"
-      type="org.springframework.web.struts.DelegatingActionProxy" >
+      type="org.unitime.timetable.action.AddNonUnivLocationAction" >
       <forward name="showAdd" path="nonUnivLocationAddTile" />
       <forward name="showRoomList" path="/roomList.do" />
      </action>
@@ -1203,7 +1251,7 @@
       path="/addSpecialUseRoom"
       scope="request"
       validate="false"
-      type="org.springframework.web.struts.DelegatingActionProxy" >
+      type="org.unitime.timetable.action.AddSpecialUseRoomAction" >
       <forward name="showAdd" path="specialUseRoomAddTile" />      
       <forward name="showRoomList" path="/roomList.do" />
 	</action>
@@ -1215,7 +1263,7 @@
       path="/roomDetail"
       scope="request"
       parameter="doit"
-      type="org.springframework.web.struts.DelegatingActionProxy"
+      type="org.unitime.timetable.action.RoomDetailAction"
       validate="false">
       <forward name="showEditRoomFeature" path="/editRoomFeature.do" />
       <forward name="showRoomList" path="/roomList.do" />
@@ -1232,7 +1280,7 @@
       name="editRoomPrefForm"
       path="/editRoomPref"
       scope="request"
-      type="org.springframework.web.struts.DelegatingActionProxy"
+      type="org.unitime.timetable.action.EditRoomPrefAction"
       validate="false">
       <forward name="showRoomDetail" path="/roomDetail.do" />
       <forward name="showEditRoomPref" path="editRoomPrefTile" />
@@ -1244,7 +1292,7 @@
       name="editRoomFeatureForm"
       path="/editRoomFeature"
       scope="request"
-      type="org.springframework.web.struts.DelegatingActionProxy"
+      type="org.unitime.timetable.action.EditRoomFeatureAction"
       validate="false">
       <forward name="showRoomDetail" path="/roomDetail.do" />
       <forward name="showEditRoomFeature" path="editRoomFeatureTile" />
@@ -1256,7 +1304,7 @@
       name="editRoomGroupForm"
       path="/editRoomGroup"
       scope="request"
-      type="org.springframework.web.struts.DelegatingActionProxy"
+      type="org.unitime.timetable.action.EditRoomGroupAction"
       validate="false">
       <forward name="showRoomDetail" path="/roomDetail.do" />
       <forward name="showEditRoomGroup" path="editRoomGroupTile" />
@@ -1268,7 +1316,7 @@
       name="editRoomDeptForm"
       path="/editRoomDept"
       scope="request"
-      type="org.springframework.web.struts.DelegatingActionProxy"
+      type="org.unitime.timetable.action.EditRoomDeptAction"
       validate="false">
       <forward name="showRoomDetail" path="/roomDetail.do" />
       <forward name="showEditRoomDept" path="editRoomDeptTile" />
@@ -1276,7 +1324,7 @@
     
     <action 
     	path="/back"
-    	type="org.springframework.web.struts.DelegatingActionProxy"
+    	type="org.unitime.timetable.action.BackAction"
 		scope="request"
 		validate="false" />
 
@@ -1286,7 +1334,7 @@
       name="roomListForm"
       path="/roomSearch"
       scope="request"
-      type="org.springframework.web.struts.DelegatingActionProxy"
+      type="org.unitime.timetable.action.RoomSearchAction"
       validate="false">
       <forward name="showRoomList" path="roomListTile" />
       <forward name="roomList" path="/roomList.do" />
@@ -1299,18 +1347,19 @@
       name="roomListForm"
       path="/roomChange"
       scope="request"
-      type="org.springframework.web.struts.DelegatingActionProxy"
+      type="org.unitime.timetable.action.RoomSearchAction"
       validate="false">
       <forward name="showRoomList" path="roomListTile" />
       <forward name="showRoomSearch" path="roomSearchTile" />
     </action>
+    
     <action
       attribute="roomFeatureListForm"
       input="/admin/roomFeatureList.jsp"
       name="roomFeatureListForm"
       path="/roomFeatureChange"
       scope="request"
-      type="org.springframework.web.struts.DelegatingActionProxy"
+      type="org.unitime.timetable.action.RoomFeatureSearchAction"
       validate="false">
       <forward name="showRoomFeatureList" path="roomFeatureListTile" />
       <forward name="showRoomFeatureSearch" path="roomFeatureSearchTile" />
@@ -1326,7 +1375,7 @@
       name="roomFeatureListForm"
       path="/roomFeatureSearch"
       scope="request"
-      type="org.springframework.web.struts.DelegatingActionProxy"
+      type="org.unitime.timetable.action.RoomFeatureSearchAction"
       validate="false">
       <forward name="roomFeatureList" path="/roomFeatureList.do" />
       <forward name="showRoomFeatureSearch" path="roomFeatureSearchTile" />
@@ -1338,7 +1387,7 @@
       name="roomFeatureEditForm"
       path="/roomFeatureAdd"
       scope="request"
-      type="org.springframework.web.struts.DelegatingActionProxy"
+      type="org.unitime.timetable.action.RoomFeatureAddAction"
       validate="false">
       <forward name="showAdd" path="roomFeatureAddTile" />
       <forward name="showRoomFeatureList" path="/roomFeatureList.do" />
@@ -1349,7 +1398,7 @@
       name="roomGroupListForm"
       path="/roomGroupSearch"
       scope="request"
-      type="org.springframework.web.struts.DelegatingActionProxy"
+      type="org.unitime.timetable.action.RoomGroupSearchAction"
       validate="false">
       <forward name="showRoomGroupList" path="roomGroupListTile" />
       <forward name="roomGroupList" path="/roomGroupList.do" />
@@ -1361,7 +1410,7 @@
       name="roomGroupListForm"
       path="/roomGroupChange"
       scope="request"
-      type="org.springframework.web.struts.DelegatingActionProxy"
+      type="org.unitime.timetable.action.RoomGroupSearchAction"
       validate="false">
       <forward name="showRoomGroupList" path="roomGroupListTile" />
       <forward name="showRoomGroupSearch" path="roomGroupSearchTile" />
@@ -1372,7 +1421,7 @@
       name="roomGroupEditForm"
       path="/roomGroupAdd"
       scope="request"
-      type="org.springframework.web.struts.DelegatingActionProxy"
+      type="org.unitime.timetable.action.RoomGroupAddAction"
       validate="false">
       <forward name="showRoomGroupList" path="/roomGroupList.do" />
       <forward name="showAdd" path="roomGroupAddTile" />
@@ -1383,7 +1432,7 @@
       name="editRoomForm"
       path="/editRoom"
       scope="request"
-      type="org.springframework.web.struts.DelegatingActionProxy"
+      type="org.unitime.timetable.action.EditRoomAction"
       validate="false">
       <forward name="showEditRoom" path="editRoomTile" />
       <forward name="showAddRoom" path="addRoomTile" />
@@ -1395,7 +1444,7 @@
       name="instructorListUpdateForm"
       path="/instructorListUpdate"
       scope="request"
-      type="org.springframework.web.struts.DelegatingActionProxy"
+      type="org.unitime.timetable.action.InstructorListUpdateAction"
       validate="false" >
       <forward name="showUpdateInstructorList" path="instructorListUpdateTile" />
     </action>
@@ -1405,7 +1454,7 @@
       name="instructorEditForm"
       path="/instructorDetail"
       scope="request"
-      type="org.springframework.web.struts.DelegatingActionProxy"
+      type="org.unitime.timetable.action.InstructorDetailAction"
       validate="false" >
       <forward name="showInstructorDetail" path="instructorDetailTile" />
       <forward 
@@ -1418,7 +1467,7 @@
       name="instructorEditForm"
       path="/instructorAdd"
       scope="request"
-      type="org.springframework.web.struts.DelegatingActionProxy"
+      type="org.unitime.timetable.action.InstructorAddAction"
       validate="false" >
       <forward name="showAdd" path="instructorAddTile" />
     </action>
@@ -1428,7 +1477,7 @@
       name="instructorEditForm"
       path="/instructorInfoEdit"
       scope="request"
-      type="org.springframework.web.struts.DelegatingActionProxy"
+      type="org.unitime.timetable.action.InstructorInfoEditAction"
       validate="false" >
       <forward name="showEdit" path="instructorInfoEditTile" />
       <forward name="showDetail" path="/instructorDetail.do" />
@@ -1440,7 +1489,7 @@
       name="instructorEditForm"
       path="/instructorPrefEdit"
       scope="request"
-      type="org.springframework.web.struts.DelegatingActionProxy"
+      type="org.unitime.timetable.action.InstructorPrefEditAction"
       validate="false">
       <forward name="showEdit" path="instructorPrefsEditTile" />
       <forward name="showDetail" path="/instructorDetail.do" />
@@ -1448,7 +1497,7 @@
     
     <action
        path="/courseOfferingEdit"
-       type="org.springframework.web.struts.DelegatingActionProxy"
+       type="org.unitime.timetable.action.CourseOfferingEditAction"
        attribute="courseOfferingEditForm"
        input="courseOfferingEditTile"
        name="courseOfferingEditForm"
@@ -1464,7 +1513,7 @@
     
     <action
        path="/designatorList"
-       type="org.springframework.web.struts.DelegatingActionProxy"
+       type="org.unitime.timetable.action.DesignatorListAction"
        attribute="designatorListForm"
        input="designatorListTile"
        name="designatorListForm"
@@ -1480,7 +1529,7 @@
     
     <action
        path="/designatorAdd"
-       type="org.springframework.web.struts.DelegatingActionProxy"
+       type="org.unitime.timetable.action.DesignatorEditAction"
        attribute="designatorEditForm"
        input="designatorAddTile"
        name="designatorEditForm"
@@ -1496,7 +1545,7 @@
     
     <action
        path="/designatorEdit"
-       type="org.springframework.web.struts.DelegatingActionProxy"
+       type="org.unitime.timetable.action.DesignatorEditAction"
        attribute="designatorEditForm"
        input="designatorEditTile"
        name="designatorEditForm"
@@ -1512,7 +1561,7 @@
     
     <action
        path="/applicationConfig"
-       type="org.springframework.web.struts.DelegatingActionProxy"
+       type="org.unitime.timetable.action.ApplicationConfigAction"
        attribute="applicationConfigForm"
        input="applicationConfigTile"
        name="applicationConfigForm"
@@ -1525,7 +1574,7 @@
     
     <action
        path="/departmentEdit"
-       type="org.springframework.web.struts.DelegatingActionProxy"
+       type="org.unitime.timetable.action.DepartmentEditAction"
        attribute="departmentEditForm"
        input="departmentEditTile"
        name="departmentEditForm"
@@ -1544,7 +1593,7 @@
 
       <action
          path="/classInstructorAssignment"
-         type="org.springframework.web.struts.DelegatingActionProxy"
+         type="org.unitime.timetable.action.ClassInstructorAssignmentAction"
          attribute="classInstructorAssignmentForm"
          input="classInstructorAssignmentTile"
          name="classInstructorAssignmentForm"
@@ -1560,7 +1609,7 @@
     
     <action
        path="/chameleon"
-       type="org.springframework.web.struts.DelegatingActionProxy"
+       type="org.unitime.timetable.action.ChameleonAction"
        attribute="chameleonForm"
        input="chameleonTile"
        name="chameleonForm"
@@ -1576,7 +1625,7 @@
     
     <action
        path="/sectioningDemo"
-       type="org.springframework.web.struts.DelegatingActionProxy"
+       type="org.unitime.timetable.action.SectioningDemoAction"
        attribute="sectioningDemoForm"
        input="sectioningDemoTile"
        name="sectioningDemoForm"
@@ -1589,7 +1638,7 @@
 
     <action
        path="/inquiry"
-       type="org.springframework.web.struts.DelegatingActionProxy"
+       type="org.unitime.timetable.action.InquiryAction"
        attribute="inquiryForm"
        input="inquiryTile"
        name="inquiryForm"
@@ -1605,7 +1654,7 @@
     
     <action
       path="/login"
-      type="org.springframework.web.struts.DelegatingActionProxy"
+      type="org.unitime.timetable.action.LoginAction"
       validate="false"/> 
 
     <action
@@ -1614,7 +1663,7 @@
       name="dataImportForm"
       path="/dataImport"
       scope="request"
-      type="org.springframework.web.struts.DelegatingActionProxy"
+      type="org.unitime.timetable.action.DataImportAction"
       validate="false" >
        <forward 
        		name="display" 
@@ -1623,7 +1672,7 @@
 
     <action
        path="/exactTimeEdit"
-       type="org.springframework.web.struts.DelegatingActionProxy"
+       type="org.unitime.timetable.action.ExactTimeEditAction"
        attribute="exactTimeEditForm"
        input="exactTimeEditTile"
        name="exactTimeEditForm"
@@ -1636,7 +1685,7 @@
 
     <action
        path="/lastChanges"
-       type="org.springframework.web.struts.DelegatingActionProxy"
+       type="org.unitime.timetable.action.LastChangesAction"
        attribute="lastChangesForm"
        input="lastChangesTile"
        name="lastChangesForm"
@@ -1649,7 +1698,7 @@
 
     <action
        path="/deptStatusTypeEdit"
-       type="org.springframework.web.struts.DelegatingActionProxy"
+       type="org.unitime.timetable.action.DeptStatusTypeEditAction"
        attribute="deptStatusTypeEditForm"
        input="deptStatusTypeEditTile"
        name="deptStatusTypeEditForm"
@@ -1662,7 +1711,7 @@
 
     <action
        path="/userEdit"
-       type="org.springframework.web.struts.DelegatingActionProxy"
+       type="org.unitime.timetable.action.UserEditAction"
        attribute="userEditForm"
        input="userEditTile"
        name="userEditForm"
@@ -1675,7 +1724,7 @@
 
     <action
        path="/buildingEdit"
-       type="org.springframework.web.struts.DelegatingActionProxy"
+       type="org.unitime.timetable.action.BuildingEditAction"
        attribute="buildingEditForm"
        input="buildingEditTile"
        name="buildingEditForm"
@@ -1694,7 +1743,7 @@
 
     <action
        path="/itypeDescEdit"
-       type="org.springframework.web.struts.DelegatingActionProxy"
+       type="org.unitime.timetable.action.ItypeDescEditAction"
        attribute="itypeDescEditForm"
        input="itypeDescEditTile"
        name="itypeDescEditForm"
@@ -1713,26 +1762,26 @@
 
 	  <action
          path="/sectioningDemoAjax"
-         type="org.springframework.web.struts.DelegatingActionProxy"
+         type="org.unitime.timetable.action.ajax.SectioningDemoAjax"
          scope="request"
          validate="false" />
          
 	  <action
          path="/distributionPrefsAjax"
-         type="org.springframework.web.struts.DelegatingActionProxy"
+         type="org.unitime.timetable.action.ajax.DistributionPrefsAjax"
          scope="request"
          validate="false" />
          
       <action
       	 path="/buildingCoordsAjax"
-         type="org.springframework.web.struts.DelegatingActionProxy"
+         type="org.unitime.timetable.action.ajax.BuildingCoordsAjax"
          scope="request"
          validate="false" 
       />
 		
       <action
       	 path="/itypesAjax"
-         type="org.springframework.web.struts.DelegatingActionProxy"
+         type="org.unitime.timetable.action.ajax.ITypesAjax"
          scope="request"
          validate="false" 
       />
@@ -1744,7 +1793,7 @@
       path="/rollForwardSession"
       scope="request"
       validate="false"
-      type="org.springframework.web.struts.DelegatingActionProxy" >
+      type="org.unitime.timetable.action.RollForwardSessionAction" >
        <forward 
        		name="displayRollForwardSessionForm" 
        		path="rollForwardSessionTile" />
@@ -1759,7 +1808,7 @@
       name="examPeriodEditForm"
       path="/examPeriodEdit"
       scope="request"
-      type="org.springframework.web.struts.DelegatingActionProxy" 
+      type="org.unitime.timetable.action.ExamPeriodEditAction" 
       validate="false">
       <forward name="list" path="examPeriodsTile" />
       <forward name="add" path="addExamPeriodTile" />
@@ -1773,7 +1822,7 @@
       name="examListForm"
       path="/examList"
       scope="request"
-      type="org.springframework.web.struts.DelegatingActionProxy"
+      type="org.unitime.timetable.action.ExamListAction"
       validate="false">
       <forward name="list" path="examListTile" />
       <forward name="addExam" path="/examEdit.do" redirect="true"/>
@@ -1785,7 +1834,7 @@
       name="examEditForm"
       path="/examDetail"
       scope="request"
-      type="org.springframework.web.struts.DelegatingActionProxy"
+      type="org.unitime.timetable.action.ExamDetailAction"
       validate="false">
       <forward name="showExamDetail" path="examDetailTile" />
       <forward name="addDistributionPrefs" path="/examDistributionPrefs.do" />
@@ -1798,7 +1847,7 @@
       name="examEditForm"
       path="/examEdit"
       scope="request"
-      type="org.springframework.web.struts.DelegatingActionProxy"
+      type="org.unitime.timetable.action.ExamEditAction"
       validate="false">
       <forward name="showAdd" path="examAddTile" />
       <forward name="showEdit" path="examEditTile" />
@@ -1808,14 +1857,14 @@
 
 	  <action
          path="/examEditAjax"
-         type="org.springframework.web.struts.DelegatingActionProxy"
+         type="org.unitime.timetable.action.ajax.ExamEditAjax"
          scope="request"
          validate="false" />
 
 
          <action
          path="/examDistributionPrefs"
-         type="org.springframework.web.struts.DelegatingActionProxy"
+         type="org.unitime.timetable.action.ExamDistributionPrefsAction"
          attribute="examDistributionPrefsForm"
          input="examDistributionPrefsTile"
          name="examDistributionPrefsForm"
@@ -1834,7 +1883,7 @@
 
     <action
     	path="/examSolver"
-    	type="org.springframework.web.struts.DelegatingActionProxy"
+    	type="org.unitime.timetable.action.ExamSolverAction"
     	attribute="examSolverForm"
     	input="examSolverTile"
     	name="examSolverForm"
@@ -1848,7 +1897,7 @@
     
     <action
     	path="/examSolverLog"
-    	type="org.springframework.web.struts.DelegatingActionProxy"
+    	type="org.unitime.timetable.action.ExamSolverLogAction"
     	attribute="examSolverLogForm"
     	input="examSolverLogTile"
     	name="examSolverLogForm"
@@ -1862,7 +1911,7 @@
    
     <action
     	path="/assignedExams"
-    	type="org.springframework.web.struts.DelegatingActionProxy"
+    	type="org.unitime.timetable.action.AssignedExamsAction"
     	attribute="examReportForm"
     	input="assignedExamsTile"
     	name="examReportForm"
@@ -1876,7 +1925,7 @@
 
     <action
     	path="/unassignedExams"
-    	type="org.springframework.web.struts.DelegatingActionProxy"
+    	type="org.unitime.timetable.action.UnassignedExamsAction"
     	attribute="examReportForm"
     	input="unassignedExamsTile"
     	name="examReportForm"
@@ -1890,7 +1939,7 @@
 
     <action
     	path="/examGrid"
-    	type="org.springframework.web.struts.DelegatingActionProxy"
+    	type="org.unitime.timetable.action.ExamGridAction"
     	attribute="examGridForm"
     	input="examGridTile"
     	name="examGridForm"
@@ -1904,7 +1953,7 @@
 
     <action
     	path="/examChanges"
-    	type="org.springframework.web.struts.DelegatingActionProxy"
+    	type="org.unitime.timetable.action.ExamChangesAction"
     	attribute="examChangesForm"
     	input="examChangesTile"
     	name="examChangesForm"
@@ -1918,7 +1967,7 @@
 
     <action
     	path="/examInfo"
-    	type="org.springframework.web.struts.DelegatingActionProxy"
+    	type="org.unitime.timetable.action.ExamInfoAction"
     	attribute="examInfoForm"
     	input="examInfoTile"
     	name="examInfoForm"
@@ -1932,7 +1981,7 @@
     
     <action
     	path="/examAssignmentReport"
-    	type="org.springframework.web.struts.DelegatingActionProxy"
+    	type="org.unitime.timetable.action.ExamAssignmentReportAction"
     	attribute="examAssignmentReportForm"
     	input="examAssignmentReportTile"
     	name="examAssignmentReportForm"
@@ -1946,7 +1995,7 @@
     
     <action
     	path="/examPdfReport"
-    	type="org.springframework.web.struts.DelegatingActionProxy"
+    	type="org.unitime.timetable.action.ExamPdfReportAction"
     	attribute="examPdfReportForm"
     	input="examPdfReportTile"
     	name="examPdfReportForm"
@@ -1960,7 +2009,7 @@
     
     <action
     	path="/ecbs"
-    	type="org.springframework.web.struts.DelegatingActionProxy"
+    	type="org.unitime.timetable.action.ExamCbsAction"
     	attribute="ecbsForm"
     	input="ecbsTile"
     	name="ecbsForm"
@@ -1974,7 +2023,7 @@
     
     <action
     	path="/exams"
-    	type="org.springframework.web.struts.DelegatingActionProxy"
+    	type="org.unitime.timetable.action.ExamsAction"
     	attribute="examsForm"
     	input="examsTile"
     	name="examsForm"
@@ -1992,7 +2041,7 @@
 
     <action
     	path="/classes"
-    	type="org.springframework.web.struts.DelegatingActionProxy"
+    	type="org.unitime.timetable.action.ClassesAction"
     	attribute="classesForm"
     	input="classesTile"
     	name="classesForm"
@@ -2010,7 +2059,7 @@
 
     <action
     	path="/roomAvailability"
-    	type="org.springframework.web.struts.DelegatingActionProxy"
+    	type="org.unitime.timetable.action.RoomAvailabilityAction"
     	attribute="roomAvailabilityForm"
     	input="roomAvailabilityTile"
     	name="roomAvailabilityForm"
@@ -2024,7 +2073,7 @@
 
     <action
     	path="/eventDetail"
-    	type="org.springframework.web.struts.DelegatingActionProxy"
+    	type="org.unitime.timetable.action.EventDetailAction"
     	attribute="eventDetailForm"
     	input="eventDetailTile"
     	name="eventDetailForm"
@@ -2042,7 +2091,7 @@
 
     <action
     	path="/eventList"
-    	type="org.springframework.web.struts.DelegatingActionProxy"
+    	type="org.unitime.timetable.action.EventListAction"
     	attribute="eventListForm"
     	input="eventListTile"
     	name="eventListForm"
@@ -2059,7 +2108,7 @@
     
     <action
     	path="/meetingList"
-    	type="org.springframework.web.struts.DelegatingActionProxy"
+    	type="org.unitime.timetable.action.MeetingListAction"
     	attribute="meetingListForm"
     	input="meetingListTile"
     	name="meetingListForm"
@@ -2076,7 +2125,7 @@
 
     <action
     	path="/personalSchedule"
-    	type="org.springframework.web.struts.DelegatingActionProxy"
+    	type="org.unitime.timetable.action.PersonalizedExamReportAction"
     	attribute="personalizedExamReportForm"
     	input="personalizedExamReportTile"
     	name="personalizedExamReportForm"
@@ -2101,7 +2150,7 @@
 
     <action
     	path="/eventAdd"
-    	type="org.springframework.web.struts.DelegatingActionProxy"
+    	type="org.unitime.timetable.action.EventAddAction"
     	attribute="eventAddForm"
     	input="eventAddTile"
     	name="eventAddForm"
@@ -2127,7 +2176,7 @@
     
     <action
     	path="/eventRoomAvailability"
-    	type="org.springframework.web.struts.DelegatingActionProxy"
+    	type="org.unitime.timetable.action.EventRoomAvailabilityAction"
     	attribute="eventRoomAvailabilityForm"
     	input="eventRoomAvailabilityTile"
     	name="eventRoomAvailabilityForm"
@@ -2152,7 +2201,7 @@
 
     <action
     	path="/eventAddInfo"
-    	type="org.springframework.web.struts.DelegatingActionProxy"
+    	type="org.unitime.timetable.action.EventAddInfoAction"
     	attribute="eventAddInfoForm"
     	input="eventAddInfoTile"
     	name="eventAddInfoForm"
@@ -2175,7 +2224,7 @@
 
     <action
     	path="/studentSolver"
-    	type="org.springframework.web.struts.DelegatingActionProxy"
+    	type="org.unitime.timetable.action.StudentSolverAction"
     	attribute="studentSolverForm"
     	input="studentSolverTile"
     	name="studentSolverForm"
@@ -2189,7 +2238,7 @@
     
     <action
     	path="/studentSolverLog"
-    	type="org.springframework.web.struts.DelegatingActionProxy"
+    	type="org.unitime.timetable.action.StudentSolverLogAction"
     	attribute="studentSolverLogForm"
     	input="studentSolverLogTile"
     	name="studentSolverLogForm"
@@ -2203,7 +2252,7 @@
 
     <action
     	path="/sponsoringOrgList"
-    	type="org.springframework.web.struts.DelegatingActionProxy"
+    	type="org.unitime.timetable.action.SponsoringOrgListAction"
     	attribute="sponsoringOrgListForm"
     	input="sponsoringOrgListTile"
     	name="sponsoringOrgListForm"
@@ -2225,7 +2274,7 @@
 
     <action
     	path="/sponsoringOrgEdit"
-    	type="org.springframework.web.struts.DelegatingActionProxy"
+    	type="org.unitime.timetable.action.SponsoringOrgEditAction"
     	attribute="sponsoringOrgEditForm"
     	input="sponsoringOrgEditTile"
     	name="sponsoringOrgEditForm"
@@ -2247,7 +2296,7 @@
     
     <action
     	path="/eventGrid"
-    	type="org.springframework.web.struts.DelegatingActionProxy"
+    	type="org.unitime.timetable.action.EventGridAction"
     	attribute="eventGridForm"
     	input="eventGridTile"
     	name="eventGridForm"
@@ -2265,7 +2314,7 @@
     
     <action
        path="/roomTypeEdit"
-       type="org.springframework.web.struts.DelegatingActionProxy"
+       type="org.unitime.timetable.action.RoomTypeEditAction"
        attribute="roomTypeEditForm"
        input="roomTypeEditTile"
        name="roomTypeEditForm"
@@ -2278,7 +2327,7 @@
     
         <action
     	path="/eventStandardNotes"
-    	type="org.springframework.web.struts.DelegatingActionProxy"
+    	type="org.unitime.timetable.action.EventStandardNotesAction"
     	attribute="eventStandardNotesForm"
     	input="eventStandardNotesTile"
     	name="eventStandardNotesForm"
@@ -2300,7 +2349,7 @@
 
     <action
     	path="/eventStandardNoteEdit"
-    	type="org.springframework.web.struts.DelegatingActionProxy"
+    	type="org.unitime.timetable.action.EventStandardNoteEditAction"
     	attribute="eventStandardNoteEditForm"
     	input="eventStandardNoteEditTile"
     	name="eventStandardNoteEditForm"
@@ -2322,7 +2371,7 @@
 
     <action
     	path="/eventEdit"
-    	type="org.springframework.web.struts.DelegatingActionProxy"
+    	type="org.unitime.timetable.action.EventEditAction"
     	attribute="eventEditForm"
     	input="eventEditTile"
     	name="eventEditForm"
@@ -2336,13 +2385,13 @@
 
 	  <action
          path="/peopleLookupAjax"
-         type="org.springframework.web.struts.DelegatingActionProxy"
+         type="org.unitime.timetable.action.ajax.PeopleLookupAjax"
          scope="request"
          validate="false" />
 
     <action
     	path="/classInfo"
-    	type="org.springframework.web.struts.DelegatingActionProxy"
+    	type="org.unitime.timetable.action.ClassInfoAction"
     	attribute="classInfoForm"
     	input="classInfoTile"
     	name="classInfoForm"
@@ -2356,7 +2405,7 @@
 
     <action
     	path="/enrollmentAuditPdfReport"
-    	type="org.springframework.web.struts.DelegatingActionProxy"
+    	type="org.unitime.timetable.action.EnrollmentAuditPdfReportAction"
     	attribute="enrollmentAuditPdfReportForm"
     	input="enrollmentAuditPdfReportTile"
     	name="enrollmentAuditPdfReportForm"
@@ -2408,7 +2457,5 @@
 	  		property="definitions-parser-validate"
 	  		value="true" />
 	</plug-in>
-	
-	<plug-in className="org.springframework.web.struts.ContextLoaderPlugIn"/>
 
 </struts-config>

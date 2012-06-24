@@ -35,7 +35,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.MessageResources;
-import org.springframework.stereotype.Service;
 import org.unitime.commons.User;
 import org.unitime.commons.web.Web;
 import org.unitime.localization.impl.Localization;
@@ -59,7 +58,7 @@ import org.unitime.timetable.model.dao.InstrOfferingConfigDAO;
 import org.unitime.timetable.solver.WebSolver;
 import org.unitime.timetable.util.Constants;
 
-@Service("/classInstructorAssignment")
+
 public class ClassInstructorAssignmentAction extends Action {
 
 	protected final static CourseMessages MSG = Localization.create(CourseMessages.class);

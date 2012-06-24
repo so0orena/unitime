@@ -565,8 +565,6 @@ public class EnrollmentTable extends Composite {
 						@Override
 						public void onFailure(Throwable caught) {
 							iHeader.setErrorMessage(MESSAGES.failedToLoadEnrollments(caught.getMessage()));
-							iHeader.setCollapsible(null);
-							SectioningCookie.getInstance().setEnrollmentCoursesDetails(false);
 						}
 						@Override
 						public void onSuccess(List<ClassAssignmentInterface.Enrollment> result) {

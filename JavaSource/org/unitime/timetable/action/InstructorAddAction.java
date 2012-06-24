@@ -28,7 +28,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
-import org.springframework.stereotype.Service;
 import org.unitime.commons.web.Web;
 import org.unitime.localization.impl.Localization;
 import org.unitime.localization.messages.CourseMessages;
@@ -45,7 +44,6 @@ import org.unitime.timetable.util.Constants;
  * XDoclet definition:
  * @struts.action path="/addNewInstructor" name="instructorEditForm" input="/user/addNewInstructor.jsp" scope="request"
  */
-@Service("/instructorAdd")
 public class InstructorAddAction extends InstructorAction {
 	
 	protected final static CourseMessages MSG = Localization.create(CourseMessages.class);

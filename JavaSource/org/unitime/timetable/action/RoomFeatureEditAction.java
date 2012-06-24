@@ -34,9 +34,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessages;
+import org.apache.struts.actions.LookupDispatchAction;
 import org.hibernate.HibernateException;
 import org.hibernate.Transaction;
-import org.springframework.stereotype.Service;
 import org.unitime.commons.Debug;
 import org.unitime.commons.User;
 import org.unitime.commons.web.Web;
@@ -50,7 +50,6 @@ import org.unitime.timetable.model.Roles;
 import org.unitime.timetable.model.RoomFeature;
 import org.unitime.timetable.model.Session;
 import org.unitime.timetable.model.dao.RoomFeatureDAO;
-import org.unitime.timetable.spring.struts.SpringAwareLookupDispatchAction;
 import org.unitime.timetable.util.Constants;
 
 
@@ -64,8 +63,7 @@ import org.unitime.timetable.util.Constants;
  * @struts:action-forward name="showAdd" path="/admin/roomFeatureAdd.jsp"
  * @struts:action-forward name="showRoomFeatureList" path="/roomFeatureList.do" redirect="true"
  */
-@Service("/roomFeatureEdit")
-public class RoomFeatureEditAction extends SpringAwareLookupDispatchAction {
+public class RoomFeatureEditAction extends LookupDispatchAction {
 
 	// --------------------------------------------------------- Methods
 

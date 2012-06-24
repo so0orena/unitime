@@ -38,7 +38,6 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.hibernate.Transaction;
-import org.springframework.stereotype.Service;
 import org.unitime.commons.Debug;
 import org.unitime.commons.User;
 import org.unitime.commons.web.Web;
@@ -58,7 +57,6 @@ import org.unitime.timetable.webutil.PdfWebTable;
 /** 
  * @author Tomas Muller
  */
-@Service("/solverGroupEdit")
 public class SolverGroupEditAction extends Action {
 	private static SimpleDateFormat sDF = new SimpleDateFormat("MM/dd/yy hh:mmaa");
 	

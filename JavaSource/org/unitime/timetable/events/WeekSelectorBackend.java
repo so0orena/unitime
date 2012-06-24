@@ -24,20 +24,18 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-import org.springframework.stereotype.Service;
 import org.unitime.timetable.gwt.client.widgets.WeekSelector.WeekSelectorRequest;
 import org.unitime.timetable.gwt.command.client.GwtRpcResponseList;
+import org.unitime.timetable.gwt.command.server.GwtRpcHelper;
 import org.unitime.timetable.gwt.command.server.GwtRpcImplementation;
 import org.unitime.timetable.gwt.shared.EventInterface.WeekInterface;
 import org.unitime.timetable.model.Session;
 import org.unitime.timetable.model.dao.SessionDAO;
-import org.unitime.timetable.spring.SessionContext;
 
-@Service("org.unitime.timetable.gwt.client.widgets.WeekSelector$WeekSelectorRequest")
 public class WeekSelectorBackend implements GwtRpcImplementation<WeekSelectorRequest, GwtRpcResponseList<WeekInterface>> {
 
 	@Override
-	public GwtRpcResponseList<WeekInterface> execute(WeekSelectorRequest command, SessionContext context) {
+	public GwtRpcResponseList<WeekInterface> execute(WeekSelectorRequest command, GwtRpcHelper helper) {
 		GwtRpcResponseList<WeekInterface> ret = new GwtRpcResponseList<WeekInterface>();
 		Session session = SessionDAO.getInstance().get(command.getSessionId());
 		Calendar c = Calendar.getInstance(Locale.US);

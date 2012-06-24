@@ -30,7 +30,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import org.springframework.stereotype.Service;
 import org.unitime.commons.hibernate.util.HibernateUtil;
 import org.unitime.timetable.gwt.client.widgets.TimeSelector;
 import org.unitime.timetable.gwt.shared.EventInterface.FilterRpcRequest;
@@ -49,7 +48,6 @@ import org.unitime.timetable.model.dao.SessionDAO;
 import org.unitime.timetable.util.Constants;
 import org.unitime.timetable.util.DateUtils;
 
-@Service("org.unitime.timetable.gwt.shared.EventInterface$EventFilterRpcRequest")
 public class EventFilterBackend extends FilterBoxBackend {
 	
 	@Override

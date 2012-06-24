@@ -40,7 +40,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessages;
 import org.hibernate.criterion.Order;
-import org.springframework.stereotype.Service;
 import org.unitime.commons.Debug;
 import org.unitime.commons.User;
 import org.unitime.commons.web.Web;
@@ -79,7 +78,6 @@ import com.lowagie.text.pdf.PdfWriter;
  * @struts.action-forward name="showRoomGroupList" path="roomGroupListTile"
  * @struts.action-forward name="showAdd" path="/roomGroupEdit.do"
  */
-@Service("/roomGroupList")
 public class RoomGroupListAction extends Action {
 
 	// --------------------------------------------------------- Instance Variables

@@ -27,12 +27,10 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.hibernate.HibernateException;
-import org.springframework.stereotype.Service;
 
 /**
  * @author Stephanie Schluttenhofer
  */
-@Service("/classList")
 public class ClassListAction extends Action {
 	// --------------------------------------------------------- Instance Variables
 

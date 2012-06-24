@@ -39,7 +39,6 @@ import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.LabelValueBean;
 import org.apache.struts.util.MessageResources;
 import org.hibernate.Transaction;
-import org.springframework.stereotype.Service;
 import org.unitime.commons.User;
 import org.unitime.commons.web.Web;
 import org.unitime.timetable.form.EditRoomForm;
@@ -74,7 +73,6 @@ import org.unitime.timetable.webutil.RequiredTimeTable;
  * @struts.action path="/editRoom" name="editRoomForm" input="/admin/editRoom.jsp" scope="request"
  * @struts.action-forward name="showEditRoom" path="editRoomTile"
  */
-@Service("/editRoom")
 public class EditRoomAction extends Action {
 
 	// --------------------------------------------------------- Instance Variables

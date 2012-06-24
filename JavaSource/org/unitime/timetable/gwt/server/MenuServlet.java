@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.TreeSet;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpSession;
 
 import net.sf.cpsolver.ifs.util.DataProperties;
 
@@ -39,9 +40,8 @@ import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.unitime.commons.Debug;
+import org.unitime.commons.User;
 import org.unitime.commons.hibernate.util.HibernateUtil;
 import org.unitime.commons.web.Web;
 import org.unitime.localization.impl.Localization;
@@ -68,23 +68,23 @@ import org.unitime.timetable.solver.SolverProxy;
 import org.unitime.timetable.solver.WebSolver;
 import org.unitime.timetable.solver.exam.ExamSolverProxy;
 import org.unitime.timetable.solver.studentsct.StudentSolverProxy;
-import org.unitime.timetable.spring.SessionContext;
-import org.unitime.timetable.spring.UserContext;
 import org.unitime.timetable.util.Constants;
 import org.unitime.timetable.util.RoomAvailability;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 
+import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+
 /**
  * @author Tomas Muller
  */
-@Service("menu.gwt")
-public class MenuServlet implements MenuService {
+public class MenuServlet extends RemoteServiceServlet implements MenuService {
+	private static final long serialVersionUID = 9021169012914612488L;
 	private static Logger sLog = Logger.getLogger(MenuServlet.class);
     private static Element iRoot = null;
     private static PageNames sPageNames = Localization.create(PageNames.class);
 
-	public MenuServlet() {
+	public void init() throws ServletException {
 		try {
 			String menu = ApplicationProperties.getProperty("unitime.menu","menu.xml");
 			Document document = null;
@@ -126,14 +126,11 @@ public class MenuServlet implements MenuService {
 	        }
 	        
 		} catch (Exception e) {
-			if (e instanceof RuntimeException) throw (RuntimeException)e;
-			throw new RuntimeException("Unable to initialize, reason: "+e.getMessage(), e);
+			if (e instanceof ServletException) throw (ServletException)e;
+			throw new ServletException("Unable to initialize, reason: "+e.getMessage(), e);
 		}
 	}
 	
-	private @Autowired SessionContext sessionContext;
-	private SessionContext getSessionContext() { return sessionContext; }
-
 	private void merge(Element menu, Element custom) {
 		if ("remove".equals(custom.getName())) {
 			menu.getParent().remove(menu);
@@ -202,10 +199,12 @@ public class MenuServlet implements MenuService {
 		try {
 			org.hibernate.Session hibSession = SessionDAO.getInstance().getSession();
 			try {
+				// init();
+				
 				List<MenuInterface> menu = new ArrayList<MenuInterface>();
 				if (iRoot == null) throw new MenuException("menu is not configured properly");
 				
-				UserInfo user = new UserInfo(getSessionContext());
+				UserInfo user = new UserInfo(getThreadLocalRequest().getSession());
 				
 				for (Iterator<Element> i = iRoot.elementIterator(); i.hasNext(); ) {
 					Element element = i.next();
@@ -285,11 +284,11 @@ public class MenuServlet implements MenuService {
 		} else if ("isAuthenticated".equals(cond)) {
 			return userInfo.getUser() != null;
 		} else if ("hasRole".equals(cond)) {
-			UserContext user = userInfo.getUser();
+			User user = userInfo.getUser();
 			if (user == null) return false;
 			String role = conditionElement.attributeValue("name");
-			if (role == null) return user.getCurrentRole() != null; // has any role
-			return role.equalsIgnoreCase(user.getCurrentRole());
+			if (role == null) return user.getRole() != null; // has any role
+			return role.equalsIgnoreCase(user.getRole());
 		} else if ("propertyEquals".equals(cond)) {
 			return conditionElement.attributeValue("value", "true").equalsIgnoreCase(ApplicationProperties.getProperty(
 					conditionElement.attributeValue("name", "dummy"),
@@ -303,9 +302,9 @@ public class MenuServlet implements MenuService {
 			} else if ("hasRoomAvailability".equals(right)) {
 				return RoomAvailability.getInstance() != null;
 			} else if ("hasPersonalReport".equals(right)) {
-				return userInfo.getUser() != null && PersonalizedExamReportAction.hasPersonalReport(userInfo.getUser().getExternalUserId());
+				return userInfo.getUser() != null && PersonalizedExamReportAction.hasPersonalReport(userInfo.getUser());
 			} else if ("isChameleon".equals(right)) {
-				return getSessionContext().getAttribute("hdnAdminAlias")!=null && getSessionContext().getAttribute("hdnAdminAlias").toString().equals("1");
+				return getThreadLocalRequest().getSession().getAttribute("hdnAdminAlias")!=null && getThreadLocalRequest().getSession().getAttribute("hdnAdminAlias").toString().equals("1");
 			} else if ("isSectioningEnabled".equals(right)) {
 				return OnlineSectioningService.isEnabled();
 			} else if ("isStudent".equals(right)) {
@@ -315,7 +314,7 @@ public class MenuServlet implements MenuService {
 			} else if ("isRegistrationEnabled".equals(right)) {
 				return OnlineSectioningService.isRegistrationEnabled();
 			} else {
-				UserContext user = userInfo.getUser();
+				User user = userInfo.getUser();
 				if (user == null) return false;
 				TimetableManager manager = userInfo.getManager();
 				if (manager == null) return false;
@@ -338,13 +337,13 @@ public class MenuServlet implements MenuService {
 				} else if ("canAudit".equals(right)) {
 					return manager.canAudit(session, user);
 				} else if ("hasCourseReports".equals(right)) {
-					return SavedHQL.hasQueries(SavedHQL.Flag.APPEARANCE_COURSES, Roles.ADMIN_ROLE.equals(user.getCurrentRole()));
+					return SavedHQL.hasQueries(SavedHQL.Flag.APPEARANCE_COURSES, user.isAdmin());
 				} else if ("hasExamReports".equals(right)) {
-					return SavedHQL.hasQueries(SavedHQL.Flag.APPEARANCE_EXAMS, Roles.ADMIN_ROLE.equals(user.getCurrentRole()));
+					return SavedHQL.hasQueries(SavedHQL.Flag.APPEARANCE_EXAMS, user.isAdmin());
 				} else if ("hasEventReports".equals(right)) {
-					return SavedHQL.hasQueries(SavedHQL.Flag.APPEARANCE_EVENTS, Roles.ADMIN_ROLE.equals(user.getCurrentRole()));
+					return SavedHQL.hasQueries(SavedHQL.Flag.APPEARANCE_EVENTS, user.isAdmin());
 				} else if ("hasStudentReports".equals(right)) {
-					return SavedHQL.hasQueries(SavedHQL.Flag.APPEARANCE_SECTIONING, Roles.ADMIN_ROLE.equals(user.getCurrentRole()));
+					return SavedHQL.hasQueries(SavedHQL.Flag.APPEARANCE_SECTIONING, user.isAdmin());
 				}
 			}
 			sLog.warn("Unknown right " + right + ".");
@@ -355,34 +354,35 @@ public class MenuServlet implements MenuService {
 	}
 	
 	public static class UserInfo {
-		UserContext iUser = null;
+		User iUser = null;
 		Session iSession = null;
 		TimetableManager iManager = null;
 
-		public UserInfo(SessionContext context) {
-			iUser = context.getUser();
+		public UserInfo(HttpSession session) {
+			iUser = Web.getUser(session);
 			if (iUser != null) {
-				Long sessionId = iUser.getCurrentAcademicSessionId();
-				if (sessionId != null)
+				Long sessionId = (Long) iUser.getAttribute(Constants.SESSION_ID_ATTR_NAME);
+				if (sessionId != null) {
 					iSession = SessionDAO.getInstance().get(sessionId);
-				iManager = TimetableManager.findByExternalId(iUser.getExternalUserId());
+				}
+				iManager = TimetableManager.getManager(iUser);
 			}
 		}
 		
-		public UserContext getUser() { return iUser; }
+		public User getUser() { return iUser; }
 		public Session getSession() { return iSession; }
 		public TimetableManager getManager() { return iManager; }
 		public boolean isStudent() {
 			if (getUser() == null) return false;
 			return ((Number)StudentDAO.getInstance().getSession().createQuery("select count(s) from Student s where " +
 					"s.externalUniqueId = :uid")
-					.setString("uid", getUser().getExternalUserId()).setCacheable(true).uniqueResult()).intValue() > 0;
+					.setString("uid", getUser().getId()).setCacheable(true).uniqueResult()).intValue() > 0;
 		}
 		public boolean isInstructor() {
 			if (getUser() == null) return false;
 			return ((Number)StudentDAO.getInstance().getSession().createQuery("select count(s) from DepartmentalInstructor s where " +
 					"s.externalUniqueId = :uid")
-					.setString("uid", getUser().getExternalUserId()).setCacheable(true).uniqueResult()).intValue() > 0;
+					.setString("uid", getUser().getId()).setCacheable(true).uniqueResult()).intValue() > 0;
 		}
 		
 	}
@@ -393,7 +393,7 @@ public class MenuServlet implements MenuService {
 			org.hibernate.Session hibSession = SessionDAO.getInstance().getSession();
 			try {
 				
-				UserInfo user = new UserInfo(getSessionContext());
+				UserInfo user = new UserInfo(getThreadLocalRequest().getSession());
 				if (user.getUser() == null) 
 					return null;
 				
@@ -412,19 +412,20 @@ public class MenuServlet implements MenuService {
 		 				}
 		 			}
 		 		} else {
-		 			if (user.getManager() != null)
-		 				for (Department department: user.getManager().getDepartments())
-		 					if (department.getSession().equals(user.getSession()))
-		 						dept += (dept.isEmpty() ? "" : ",") + department.getDeptCode();
+		 			TreeSet depts = new TreeSet(user.getUser().getDepartments());
+		 			for (Iterator i=depts.iterator();i.hasNext();) {
+		 				dept += i.next().toString();
+		 				if (i.hasNext()) dept += ",";
+		 			}
 		 		}
 		 		ret.put("1Dept", dept);
 		 		
-		 		String role = user.getUser().getCurrentRole();
+		 		String role = user.getUser().getRole();
 		 		if (role==null) role = "No Role";
 		 		ret.put("2Role", role);
 		 		
-		 		if (user.getUser() != null && Roles.ADMIN_ROLE.equals(user.getUser().getCurrentRole()) || 
-		 			(getSessionContext().getAttribute("hdnAdminAlias")!=null && getSessionContext().getAttribute("hdnAdminAlias").toString().equals("1")))
+		 		if (user.getUser() != null && Roles.ADMIN_ROLE.equals(user.getUser().getRole()) || 
+		 			(getThreadLocalRequest().getSession().getAttribute("hdnAdminAlias")!=null && getThreadLocalRequest().getSession().getAttribute("hdnAdminAlias").toString().equals("1")))
 		 			ret.put("Chameleon", "");
 		 		
 			} finally {
@@ -443,7 +444,7 @@ public class MenuServlet implements MenuService {
 			org.hibernate.Session hibSession = SessionDAO.getInstance().getSession();
 			try {
 				
-				UserInfo user = new UserInfo(getSessionContext());
+				UserInfo user = new UserInfo(getThreadLocalRequest().getSession());
 		 		if (user.getSession() == null)
 		 			return null;
 		 		
@@ -486,9 +487,9 @@ public class MenuServlet implements MenuService {
 			org.hibernate.Session hibSession = SessionDAO.getInstance().getSession();
 			try {
 				
-				SolverProxy solver = WebSolver.getSolver(getSessionContext().getHttpSession());
-				ExamSolverProxy examSolver = (solver==null?WebSolver.getExamSolverNoSessionCheck(getSessionContext().getHttpSession()):null);
-				StudentSolverProxy studentSolver = (solver==null && examSolver==null?WebSolver.getStudentSolverNoSessionCheck(getSessionContext().getHttpSession()):null); 
+				SolverProxy solver = WebSolver.getSolver(getThreadLocalRequest().getSession());
+				ExamSolverProxy examSolver = (solver==null?WebSolver.getExamSolverNoSessionCheck(getThreadLocalRequest().getSession()):null);
+				StudentSolverProxy studentSolver = (solver==null && examSolver==null?WebSolver.getStudentSolverNoSessionCheck(getThreadLocalRequest().getSession()):null); 
 				
 				
 				Map progress = (studentSolver!=null?studentSolver.getProgress():examSolver!=null?examSolver.getProgress():solver!=null?solver.getProgress():null);
@@ -579,11 +580,9 @@ public class MenuServlet implements MenuService {
 	
 	public String getUserData(String property) throws MenuException {
 		try {
-			UserContext user = getSessionContext().getUser();
-			if (user == null) return null;
 			org.hibernate.Session hibSession = SessionDAO.getInstance().getSession();
 			try {
-				return UserData.getProperty(user.getExternalUserId(), property);
+				return UserData.getProperty(getThreadLocalRequest().getSession(), property);
 			} finally {
 				hibSession.close();
 			}
@@ -595,11 +594,9 @@ public class MenuServlet implements MenuService {
 	
 	public Boolean setUserData(String property, String value) throws MenuException {
 		try {
-			UserContext user = getSessionContext().getUser();
-			if (user == null) return null;
 			org.hibernate.Session hibSession = SessionDAO.getInstance().getSession();
 			try {
-				UserData.setProperty(user.getExternalUserId(), property, value);
+				UserData.setProperty(getThreadLocalRequest().getSession(), property, value);
 				return null;
 			} finally {
 				hibSession.close();
@@ -612,11 +609,9 @@ public class MenuServlet implements MenuService {
 	
 	public HashMap<String, String> getUserData(Collection<String> property) throws MenuException {
 		try {
-			UserContext user = getSessionContext().getUser();
-			if (user == null) return null;
 			org.hibernate.Session hibSession = SessionDAO.getInstance().getSession();
 			try {
-				return UserData.getProperties(user.getExternalUserId(), property);
+				return UserData.getProperties(getThreadLocalRequest().getSession(), property);
 			} finally {
 				hibSession.close();
 			}
@@ -628,12 +623,10 @@ public class MenuServlet implements MenuService {
 	
 	public Boolean setUserData(List<String[]> property2value) throws MenuException {
 		try {
-			UserContext user = getSessionContext().getUser();
-			if (user == null) return null;
 			org.hibernate.Session hibSession = SessionDAO.getInstance().getSession();
 			try {
 				for (String[] p: property2value)
-					UserData.setProperty(user.getExternalUserId(), p[0], p[1]);
+					UserData.setProperty(getThreadLocalRequest().getSession(), p[0], p[1]);
 				return null;
 			} finally {
 				hibSession.close();

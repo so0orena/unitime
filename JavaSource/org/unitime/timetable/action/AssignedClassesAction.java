@@ -34,7 +34,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.hibernate.ObjectNotFoundException;
-import org.springframework.stereotype.Service;
 import org.unitime.commons.Debug;
 import org.unitime.commons.web.Web;
 import org.unitime.commons.web.WebTable;
@@ -58,7 +57,6 @@ import org.unitime.timetable.webutil.PdfWebTable;
 /** 
  * @author Tomas Muller
  */
-@Service("/assignedClasses")
 public class AssignedClassesAction extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		AssignedClassesForm myForm = (AssignedClassesForm) form;

@@ -37,7 +37,6 @@ import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.LabelValueBean;
 import org.apache.struts.util.MessageResources;
 import org.hibernate.Transaction;
-import org.springframework.stereotype.Service;
 import org.unitime.commons.User;
 import org.unitime.commons.web.Web;
 import org.unitime.timetable.form.NonUnivLocationForm;
@@ -64,7 +63,6 @@ import org.unitime.timetable.util.LocationPermIdGenerator;
  * XDoclet definition:
  * @struts.action path="/addNonUnivLocation" name="nonUnivLocationForm" input="/admin/addNonUnivLocation.jsp" scope="request" validate="true"
  */
-@Service("/addNonUnivLocation")
 public class AddNonUnivLocationAction extends Action {
 
 	// --------------------------------------------------------- Instance Variables

@@ -30,7 +30,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessages;
-import org.springframework.stereotype.Service;
 import org.unitime.commons.User;
 import org.unitime.commons.web.Web;
 import org.unitime.timetable.form.EventListForm;
@@ -44,7 +43,6 @@ import org.unitime.timetable.webutil.pdf.PdfEventTableBuilder;
 /**
  * @author Zuzana Mullerova
  */
-@Service("/eventList")
 public class EventListAction extends Action {
 
 	public ActionForward execute(

@@ -46,7 +46,6 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.springframework.stereotype.Service;
 import org.unitime.commons.Debug;
 import org.unitime.commons.MultiComparable;
 import org.unitime.commons.User;
@@ -89,7 +88,6 @@ import org.unitime.timetable.solver.exam.ui.ExamInfo.ExamSectionInfo;
 import org.unitime.timetable.util.Constants;
 import org.unitime.timetable.webutil.PdfWebTable;
 
-@Service("/personalSchedule")
 public class PersonalizedExamReportAction extends Action {
     public static ExternalUidTranslation sTranslation;
     private static Log sLog = LogFactory.getLog(PersonalizedExamReportAction.class);
@@ -107,15 +105,14 @@ public class PersonalizedExamReportAction extends Action {
         return sTranslation.translate(uid, Source.User, target);
     }
     
-    public static boolean hasPersonalReport(String userId) {
-    	if (userId == null) return false;
+    public static boolean hasPersonalReport(User user) {
         //if (user.getRole()!=null) return false;
         HashSet<Session> sessions = new HashSet();
         DepartmentalInstructor instructor = null;
         for (Iterator i=new DepartmentalInstructorDAO().
                 getSession().
                 createQuery("select i from DepartmentalInstructor i where i.externalUniqueId=:externalId").
-                setString("externalId",userId).
+                setString("externalId",user.getId()).
                 setCacheable(true).list().iterator();i.hasNext();) {
             DepartmentalInstructor s = (DepartmentalInstructor)i.next();
             if (!canDisplay(s.getDepartment().getSession())) continue;
@@ -127,7 +124,7 @@ public class PersonalizedExamReportAction extends Action {
         for (Iterator i=new StudentDAO().
                 getSession().
                 createQuery("select s from Student s where s.externalUniqueId=:externalId").
-                setString("externalId",userId).
+                setString("externalId",user.getId()).
                 setCacheable(true).list().iterator();i.hasNext();) {
             Student s = (Student)i.next();
             if (!canDisplay(s.getSession())) continue;

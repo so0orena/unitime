@@ -34,9 +34,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TreeSet;
 
+import javax.servlet.ServletException;
+
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.unitime.commons.User;
+import org.unitime.commons.web.Web;
 import org.unitime.timetable.gwt.services.ReservationService;
 import org.unitime.timetable.gwt.shared.PageAccessException;
 import org.unitime.timetable.gwt.shared.ReservationException;
@@ -81,20 +83,20 @@ import org.unitime.timetable.model.dao.PosMajorDAO;
 import org.unitime.timetable.model.dao.ReservationDAO;
 import org.unitime.timetable.model.dao.SessionDAO;
 import org.unitime.timetable.model.dao.StudentGroupDAO;
-import org.unitime.timetable.spring.SessionContext;
-import org.unitime.timetable.spring.UserContext;
 import org.unitime.timetable.util.Constants;
+
+import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
  * @author Tomas Muller
  */
-@Service("reservation.gwt")
-public class ReservationServlet implements ReservationService {
+public class ReservationServlet extends RemoteServiceServlet implements ReservationService {
+	private static final long serialVersionUID = -3174041940015933713L;
 	private static Logger sLog = Logger.getLogger(ReservationServlet.class);
 	private static DateFormat sDateFormat = new SimpleDateFormat("MM/dd/yyyy");
 
-	private @Autowired SessionContext sessionContext;
-	private SessionContext getSessionContext() { return sessionContext; }
+	public void init() throws ServletException {
+	}
 
 	@Override
 	public List<ReservationInterface.Area> getAreas() throws ReservationException, PageAccessException {
@@ -493,7 +495,7 @@ public class ReservationServlet implements ReservationService {
 		try {
 			List<ReservationInterface> results = new ArrayList<ReservationInterface>();
 			org.hibernate.Session hibSession = ReservationDAO.getInstance().getSession();
-			UserContext user = getSessionContext().getUser();
+			User user = Web.getUser(getThreadLocalRequest().getSession());
 			String nameFormat = Settings.getSettingValue(user, Constants.SETTINGS_INSTRUCTOR_NAME_FORMAT);
 			try {
 				for (Reservation reservation: (List<Reservation>)hibSession.createQuery(
@@ -552,7 +554,7 @@ public class ReservationServlet implements ReservationService {
 	public ReservationInterface getReservation(Long reservationId) throws ReservationException, PageAccessException {
 		try {
 			org.hibernate.Session hibSession = ReservationDAO.getInstance().getSession();
-			UserContext user = getSessionContext().getUser();
+			User user = Web.getUser(getThreadLocalRequest().getSession());
 			ReservationInterface r;
 			try {
 				Reservation reservation = ReservationDAO.getInstance().get(reservationId, hibSession);
@@ -578,7 +580,7 @@ public class ReservationServlet implements ReservationService {
 	public Long save(ReservationInterface reservation) throws ReservationException, PageAccessException {
 		try {
 			org.hibernate.Session hibSession = ReservationDAO.getInstance().getSession();
-			UserContext user = getSessionContext().getUser();
+			User user = Web.getUser(getThreadLocalRequest().getSession());
 			try {
 				InstructionalOffering offering = InstructionalOfferingDAO.getInstance().get(reservation.getOffering().getId(), hibSession);
 				if (offering == null)
@@ -678,7 +680,7 @@ public class ReservationServlet implements ReservationService {
 	public Boolean delete(Long reservationId) throws ReservationException, PageAccessException {
 		try {
 			org.hibernate.Session hibSession = ReservationDAO.getInstance().getSession();
-			UserContext user = getSessionContext().getUser();
+			User user = Web.getUser(getThreadLocalRequest().getSession());
 			try {
 				Reservation reservation = ReservationDAO.getInstance().get(reservationId, hibSession);
 				if (reservation == null)
@@ -711,20 +713,20 @@ public class ReservationServlet implements ReservationService {
 	}
 	
 	private TimetableManager getManager() throws PageAccessException {
-		UserContext user = getSessionContext().getUser();
+		User user = Web.getUser(getThreadLocalRequest().getSession());
 		if (user == null) throw new PageAccessException(
-				getSessionContext().isHttpSessionNew() ? "Your timetabling session has expired. Please log in again." : "Login is required to use this page.");
-		if (user.getCurrentRole() == null) throw new PageAccessException("Insufficient user privileges.");
-		TimetableManager manager = TimetableManager.findByExternalId(user.getExternalUserId());
+				getThreadLocalRequest().getSession().isNew() ? "Your timetabling session has expired. Please log in again." : "Login is required to use this page.");
+		if (user.getRole() == null) throw new PageAccessException("Insufficient user privileges.");
+		TimetableManager manager = TimetableManager.getManager(user);
 		if (manager == null) throw new PageAccessException("Insufficient user privileges.");
 		return manager;
 	}
 	
 	private Long getAcademicSessionId() throws PageAccessException {
-		UserContext user = getSessionContext().getUser();
+		User user = Web.getUser(getThreadLocalRequest().getSession());
 		if (user == null) throw new PageAccessException(
-				getSessionContext().isHttpSessionNew() ? "Your timetabling session has expired. Please log in again." : "Login is required to use this page.");
-		Long sessionId = user.getCurrentAcademicSessionId();
+				getThreadLocalRequest().getSession().isNew() ? "Your timetabling session has expired. Please log in again." : "Login is required to use this page.");
+		Long sessionId = (Long) user.getAttribute(Constants.SESSION_ID_ATTR_NAME);
 		if (sessionId == null) throw new PageAccessException("No academic session is selecgted.");
 		return sessionId;
 	}
@@ -732,10 +734,10 @@ public class ReservationServlet implements ReservationService {
 	@Override
 	public Boolean canAddReservation() throws ReservationException, PageAccessException {
 		try {
-			UserContext user = getSessionContext().getUser();
+			User user = Web.getUser(getThreadLocalRequest().getSession());
 			if (user == null) return false;
-			if (Roles.ADMIN_ROLE.equals(user.getCurrentRole())) return true;
-			if (!Roles.DEPT_SCHED_MGR_ROLE.equals(user.getCurrentRole())) return false;
+			if (user.isAdmin()) return true;
+			if (!Roles.DEPT_SCHED_MGR_ROLE.equals(user.getRole())) return false;
 			if (getManager().getDepartments().isEmpty()) return false;
 			org.hibernate.Session hibSession = ReservationDAO.getInstance().getSession();
 			try {
@@ -759,10 +761,10 @@ public class ReservationServlet implements ReservationService {
 		try {
 			List<ReservationInterface> results = new ArrayList<ReservationInterface>();
 			Query q = new Query(filter);
-			getSessionContext().setAttribute("Reservations.LastFilter", filter);
+			getThreadLocalRequest().getSession().setAttribute("Reservations.LastFilter", filter);
 			org.hibernate.Session hibSession = CurriculumDAO.getInstance().getSession();
 			getManager();
-			UserContext user = getSessionContext().getUser();
+			User user = Web.getUser(getThreadLocalRequest().getSession());
 			String nameFormat = Settings.getSettingValue(user, Constants.SETTINGS_INSTRUCTOR_NAME_FORMAT);
 			try {
 				for (Reservation reservation: (List<Reservation>)hibSession.createQuery(
@@ -791,7 +793,7 @@ public class ReservationServlet implements ReservationService {
 
 	@Override
 	public String lastReservationFilter() throws ReservationException, PageAccessException {
-		String filter = (String)getSessionContext().getAttribute("Reservations.LastFilter");
+		String filter = (String)getThreadLocalRequest().getSession().getAttribute("Reservations.LastFilter");
 		if (filter == null) {
 			filter = "";
 			Long sessionId = getAcademicSessionId();

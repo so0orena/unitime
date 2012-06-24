@@ -35,7 +35,6 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.springframework.stereotype.Service;
 import org.unitime.commons.Debug;
 import org.unitime.commons.web.Web;
 import org.unitime.commons.web.WebTable;
@@ -55,7 +54,6 @@ import org.unitime.timetable.solver.interactive.SuggestionsModel;
 /** 
  * @author Tomas Muller
  */
-@Service("/suggestions")
 public class SuggestionsAction extends Action {
 	
 	protected final static CourseMessages MSG = Localization.create(CourseMessages.class);

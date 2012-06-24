@@ -298,9 +298,7 @@ public class CourseCurriculaTable extends Composite {
 			@Override
 			public void onValueChange(ValueChangeEvent<Boolean> event) {
 				CurriculumCookie.getInstance().setCurriculaCoursesDetails(event.getValue());
-				if (iCurricula.getRowCount() == 0) {
-					refresh();
-				} else if (iCurricula.getRowCount() > 2) {
+				if (iCurricula.getRowCount() > 2) {
 					for (int row = 1; row < iCurricula.getRowCount() - 1; row++) {
 						int rowType = iRowTypes.get(row);
 						if (CurriculumCookie.getInstance().getCurriculaCoursesDetails() && (rowType == sRowTypeCurriculum || rowType == sRowTypeOtherArea)) continue;
@@ -992,8 +990,6 @@ public class CourseCurriculaTable extends Composite {
 				@Override
 				public void onFailure(Throwable caught) {
 					iHeader.setErrorMessage("Failed to load curricula (" + caught.getMessage() + ").");
-					iHeader.setCollapsible(null);
-					CurriculumCookie.getInstance().setCurriculaCoursesDetails(false);
 				}
 				@Override
 				public void onSuccess(TreeSet<CurriculumInterface> result) {
@@ -1033,12 +1029,7 @@ public class CourseCurriculaTable extends Composite {
 		initCallbacks();
 		iOfferingId = Long.valueOf(panel.getElement().getInnerText());
 		iCourseName = null;
-		if (CurriculumCookie.getInstance().getCurriculaCoursesDetails()) {
-			refresh();
-		} else {
-			iHeader.clearMessage();
-			iHeader.setCollapsible(false);
-		}
+		refresh();
 		panel.getElement().setInnerText(null);
 		panel.add(this);
 		panel.setVisible(true);

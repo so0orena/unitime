@@ -23,7 +23,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.hibernate.HibernateException;
-import org.springframework.stereotype.Service;
 import org.unitime.commons.web.Web;
 import org.unitime.timetable.form.SessionListForm;
 import org.unitime.timetable.model.Roles;
@@ -42,7 +41,6 @@ import org.apache.struts.action.ActionMapping;
  * XDoclet definition:
  * @struts:action path="/sessionList" name="sessionListForm" input="/admin/sessionList.jsp" scope="request" validate="true"
  */
-@Service("/sessionList")
 public class SessionListAction extends Action {
 
 	// --------------------------------------------------------- Instance Variables
