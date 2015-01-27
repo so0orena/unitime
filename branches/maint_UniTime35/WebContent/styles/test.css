@@ -1,0 +1,116 @@
+/*
+ * UniTime 3.2 (University Timetabling Application)
+ * Copyright (C) 2008 - 2010, UniTime LLC
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+*/
+
+.unitime-Body {
+	background-color: #a37b2c;
+}
+
+.unitime-Page .body {
+	border: 1px solid #101010;
+}
+
+.unitime-MobilePage .body {
+	display: inline-block;
+	background-color: #fff;
+}
+
+.unitime-MobilePageHeader {
+	max-width: 100vw;
+}
+
+.unitime-MobileHeader {
+	max-width: 100vw;
+}
+
+.unitime-MobileNavigation {
+	max-width: 100vw;
+}
+
+.unitime-Footer {
+	color: #111;
+}
+
+.unitime-Footer .row {
+	color: #101010;
+}
+
+.unitime-MobileFooter {
+	color: #111;
+	background-color: #a37b2c;
+}
+
+.unitime-MobileFooter .row {
+	color: #101010;
+}
+
+a.unitime-FooterLink:link,a.unitime-FooterLink:visited,a.unitime-FooterLink:active,a.unitime-FooterLink:hover {
+	color: #111;
+}
+
+.unitime-Disclaimer {
+	border-top: solid 5px #a37b2c;
+	color: #999;
+	padding: 2px;
+	background-color: black;
+	max-width: none;
+}
+
+.unitime-Disclaimer A.link:link,A.link:visited,A.link:active,A.link:hover {
+	color: #999;
+}
+
+.unitime-MobileFooter {
+	border-top: none;
+}
+
+.unitime-MobileDisclaimer {
+	border-top: solid 5px #a37b2c;
+	color: #999;
+	padding: 2px;
+	background-color: black;
+}
+
+.unitime-MenuHeaderLabel {
+	color: #101010;
+}
+
+.unitime-MenuHeaderOpen {
+	border: 1px solid #101010;
+	background-color: #FCDD89;
+}
+
+.gwt-DisclosurePanel .content {
+  border-left: 1px solid #101010;
+  border-bottom: 1px solid #101010;
+  border-right: 1px solid #101010;
+  padding-right: 5px;
+  background-color: white;
+}
+
+.gwt-StackPanel {
+  border-bottom: 1px solid #505050;
+}
+
+.gwt-StackPanel .gwt-StackPanelItem {
+  border: 1px solid #505050;
+}
+
+.gwt-StackPanel .gwt-StackPanelContent {
+  border: 1px solid #505050;
+}

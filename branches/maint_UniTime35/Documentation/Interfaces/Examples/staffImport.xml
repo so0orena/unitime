@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE staff PUBLIC "-//UniTime//UniTime Staff Import DTD/EN" "http://www.unitime.org/interface/Staff.dtd">
+
+<!-- 
+ * UniTime 3.2 - 3.5 (University Timetabling Application)
+ * Copyright (C) 2008 - 2014, UniTime LLC
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ -->
+
+	<!-- staffMember ==> Required:  externamId, firstName, lastName, positionType, department
+	                     Optional:  middleName, email, acadTitle
+	-->
+<staff campus="PWL" term="Fal" year="2010">
+	<!--
+		Since UniTime 3.3.165 positionCode attribute (that has to be translated through position_code_to_type table) was replaced by positionType attribute
+		that refers directly to position_type table.
+		Attribute acadTitle (academic title) was added in UniTime 3.5.172
+	 -->
+	<staffMember externalId="100" firstName="Joe" middleName="S" lastName="Doe" acadTitle="Dr." positionType="ASSOC_PROF" department="0101" email="doe@unitime.org"/>
+	<staffMember externalId="101" firstName="George" lastName="Newman" acadTitle="Prof." positionType="PROF" department="0101"/>
+	<staffMember externalId="102" firstName="John" middleName="William" lastName="Smith" acadTitle="Prof." positionType="PROF" department="0101"/>
+	<staffMember externalId="103" firstName="Josef" lastName="Nowak" positionType="INSTRUCTOR" department="0101"/>
+</staff>
