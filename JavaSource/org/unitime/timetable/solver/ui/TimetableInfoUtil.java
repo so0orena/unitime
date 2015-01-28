@@ -54,11 +54,16 @@ public class TimetableInfoUtil implements TimetableInfoFileProxy {
 	
 	public static TimetableInfoFileProxy getInstance() {
 		SolverServer server = null;
-		if (SpringApplicationContextHolder.isInitialized()) {
-			// Spring -> user solver server service
-			server = ((SolverServerService)SpringApplicationContextHolder.getBean("solverServerService")).getLocalServer();
-		} else {
-			// Standalone -> use get instance
+		try {
+			if (SpringApplicationContextHolder.isInitialized()) {
+				// Spring -> user solver server service
+				server = ((SolverServerService)SpringApplicationContextHolder.getBean("solverServerService")).getLocalServer();
+			} else {
+				// Standalone -> use get instance
+				server = SolverServerImplementation.getInstance();
+			}
+		} catch (NoClassDefFoundError e) {
+			// Standalone and unaware of Spring -> use get instance
 			server = SolverServerImplementation.getInstance();
 		}
 		
