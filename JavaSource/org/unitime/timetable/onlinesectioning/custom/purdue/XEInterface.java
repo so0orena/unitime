@@ -217,6 +217,8 @@ public class XEInterface {
 		public String code;
 		public String message;
 		public String description;
+		public String type;
+		public String errorMessage;
 	}
 
 }
