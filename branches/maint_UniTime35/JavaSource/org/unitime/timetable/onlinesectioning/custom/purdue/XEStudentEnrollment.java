@@ -183,8 +183,12 @@ public class XEStudentEnrollment implements StudentEnrollmentProvider {
 					XEInterface.ErrorResponse response = readResponse(gson, resource.getResponse(), XEInterface.ErrorResponse.class);
 					helper.getAction().addOptionBuilder().setKey("exception").setValue(gson.toJson(response));
 					XEInterface.Error error = response.getError();
-					if (error != null) {
+					if (error != null && error.message != null) {
 						throw new SectioningException(error.message);
+					} else if (error != null && error.description != null) {
+						throw new SectioningException(error.description);
+					} else if (error != null && error.errorMessage != null) {
+						throw new SectioningException(error.errorMessage);
 					} else {
 						throw exception;
 					}
@@ -317,8 +321,12 @@ public class XEStudentEnrollment implements StudentEnrollmentProvider {
 					XEInterface.ErrorResponse response = readResponse(gson, resource.getResponse(), XEInterface.ErrorResponse.class);
 					helper.getAction().addOptionBuilder().setKey("exception").setValue(gson.toJson(response));
 					XEInterface.Error error = response.getError();
-					if (error != null) {
+					if (error != null && error.message != null) {
 						throw new SectioningException(error.message);
+					} else if (error != null && error.description != null) {
+						throw new SectioningException(error.description);
+					} else if (error != null && error.errorMessage != null) {
+						throw new SectioningException(error.errorMessage);
 					} else {
 						throw exception;
 					}
@@ -441,7 +449,7 @@ public class XEStudentEnrollment implements StudentEnrollmentProvider {
 											sections.add(x);
 											id2course.put(id, offering.getCourse(c.getCourseId()));
 											if (!x.isEnabledForScheduling() || nodrop.contains(id)) {
-												fails.add(new EnrollmentFailure(offering.getCourse(c), x, "Section not available for student scheduling.", false));
+												fails.add(new EnrollmentFailure(offering.getCourse(c), x, "Section not available for student scheduling.", true));
 												checked.add(id); failed.add(id);
 												drop = false;
 											}
@@ -470,8 +478,12 @@ public class XEStudentEnrollment implements StudentEnrollmentProvider {
 					XEInterface.ErrorResponse response = readResponse(gson, resource.getResponse(), XEInterface.ErrorResponse.class);
 					helper.getAction().addOptionBuilder().setKey("exception").setValue(gson.toJson(response));
 					XEInterface.Error error = response.getError();
-					if (error != null) {
+					if (error != null && error.message != null) {
 						throw new SectioningException(error.message);
+					} else if (error != null && error.description != null) {
+						throw new SectioningException(error.description);
+					} else if (error != null && error.errorMessage != null) {
+						throw new SectioningException(error.errorMessage);
 					} else {
 						throw exception;
 					}
