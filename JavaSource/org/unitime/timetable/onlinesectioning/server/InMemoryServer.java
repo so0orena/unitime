@@ -109,8 +109,7 @@ public class InMemoryServer extends AbstractLockingServer {
 	public XCourseId getCourse(String course) {
 		Lock lock = readLock();
 		try {
-			int idx = course.indexOf('-');
-			for (idx = course.indexOf('-'); idx >= 0; idx = course.indexOf('-', idx + 1)) {
+			for (int idx = course.indexOf('-'); idx >= 0; idx = course.indexOf('-', idx + 1)) {
 				String courseName = course.substring(0, idx).trim();
 				String title = course.substring(idx + 1).trim();
 				TreeSet<XCourseId> infos = iCourseForName.get(courseName.toLowerCase());
