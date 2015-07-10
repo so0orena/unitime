@@ -25,11 +25,13 @@ import java.util.Collection;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.hibernate.CacheMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.unitime.timetable.defaults.ApplicationProperty;
+import org.unitime.timetable.onlinesectioning.HasCacheMode;
 import org.unitime.timetable.security.SessionContext;
 import org.unitime.timetable.security.UserContext;
 import org.unitime.timetable.security.context.AnonymousUserContext;
@@ -59,14 +61,20 @@ public abstract class ApiConnector {
 	}
 	
 	protected ApiHelper createHelper(HttpServletRequest request, HttpServletResponse response) {
-		return new JsonApiHelper(request, response, sessionContext);
+		return new JsonApiHelper(request, response, sessionContext, getCacheMode());
+	}
+	
+	protected abstract String getName();
+	
+	protected CacheMode getCacheMode() {
+		String cacheMode = (getName() != null && !getName().isEmpty() ? ApplicationProperty.ApiCacheMode.value(getName()) : null);
+		return cacheMode != null ? CacheMode.valueOf(cacheMode) : this instanceof HasCacheMode ? ((HasCacheMode)this).getCacheMode() : null;
 	}
 	
 	protected void authenticateWithTokenIfNeeded(HttpServletRequest request, HttpServletResponse response) {
 		if ((!sessionContext.isAuthenticated() || sessionContext.getUser() instanceof AnonymousUserContext) && request.getParameter("token") != null && ApplicationProperty.ApiCanUseAPIToken.isTrue()) {
 			UserContext context = apiToken.getContext(request.getParameter("token"));
 			if (context != null) {
-				System.out.println("Pretending to be " + context.getName());
 				SecurityContextHolder.getContext().setAuthentication(new TokenAuthentication(context));
 			}
 		}
@@ -77,36 +85,44 @@ public abstract class ApiConnector {
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		authenticateWithTokenIfNeeded(request, response);
+		ApiHelper helper = createHelper(request, response);
 		try {
-			doGet(createHelper(request, response));
+			doGet(helper);
 		} finally {
+			helper.close();
 			revokeTokenAuthenticationIfNeeded(request, response);
 		}
 	}
 	
 	public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		authenticateWithTokenIfNeeded(request, response);
+		ApiHelper helper = createHelper(request, response);
 		try {
-			doPut(createHelper(request, response));
+			doPut(helper);
 		} finally {
+			helper.close();
 			revokeTokenAuthenticationIfNeeded(request, response);
 		}
 	}
 	
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		authenticateWithTokenIfNeeded(request, response);
+		ApiHelper helper = createHelper(request, response);
 		try {
-			doPost(createHelper(request, response));
+			doPost(helper);
 		} finally {
+			helper.close();
 			revokeTokenAuthenticationIfNeeded(request, response);
 		}
 	}
 	
 	public void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		authenticateWithTokenIfNeeded(request, response);
+		ApiHelper helper = createHelper(request, response);
 		try {
-			doDelete(createHelper(request, response));
+			doDelete(helper);
 		} finally {
+			helper.close();
 			revokeTokenAuthenticationIfNeeded(request, response);
 		}
 	}
